@@ -5,6 +5,8 @@ import { SessionProvider } from "next-auth/react";
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
+import { ChakraProvider } from "@chakra-ui/react";
+import EducationTheme from "~/chakra/EducationTheme";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -12,7 +14,10 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <ChakraProvider theme={EducationTheme}>
+        {/* @ts-expect-error Server Component */}
+        <Component {...pageProps} />
+      </ChakraProvider>
     </SessionProvider>
   );
 };
