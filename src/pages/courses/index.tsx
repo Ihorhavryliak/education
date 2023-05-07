@@ -1,5 +1,5 @@
-"use client";
-import { Box, Container, Divider, Flex, Link, Text } from "@chakra-ui/react";
+import { Link } from "@chakra-ui/next-js";
+import { Box, Container, Divider, Flex, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import { Layout } from "~/components/Layout";
 

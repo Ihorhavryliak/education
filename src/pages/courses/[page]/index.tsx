@@ -1,9 +1,9 @@
-"use client";
 import {
   ArrowForwardIcon,
   CheckCircleIcon,
   ExternalLinkIcon,
 } from "@chakra-ui/icons";
+import { Link } from "@chakra-ui/next-js";
 import {
   Accordion,
   AccordionButton,
@@ -15,7 +15,6 @@ import {
   Divider,
   Flex,
   Heading,
-  Link,
   Text,
 } from "@chakra-ui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
