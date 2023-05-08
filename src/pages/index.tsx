@@ -9,7 +9,7 @@ import { Box, Container } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 
 const Home: NextPage = () => {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
+  //const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
   return (
     <Container>
@@ -26,7 +26,7 @@ const Home: NextPage = () => {
 
 export default Home;
 
-const AuthShowcase: React.FC = () => {
+/* const AuthShowcase: React.FC = () => {
   const { data: sessionData } = useSession();
 
   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
@@ -49,3 +49,4 @@ const AuthShowcase: React.FC = () => {
     </div>
   );
 };
+ */
