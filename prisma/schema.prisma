@@ -67,44 +67,45 @@ model VerificationToken {
 }
 
 model GeneralProgram {
-    id               Int        @id @default(autoincrement())
-    name String
-    description String
-    coursesPages Program[]
-    updatedAt   DateTime @updatedAt
-    createdAt   DateTime @default(now())
+  id           Int       @id @default(autoincrement())
+  name         String
+  description  String
+  shortName    String
+  coursesPages Program[]
+  updatedAt    DateTime  @updatedAt
+  createdAt    DateTime  @default(now())
 }
 
-
+// plan curse
 model Program {
-    id               Int        @id @default(autoincrement())
-    name String
-    description String
-    coursesPages Curse[]
-    generalProgramId Int
-    generalProgram GeneralProgram @relation(fields: [generalProgramId], references: [id])
-    updatedAt   DateTime @updatedAt
-    createdAt   DateTime @default(now())
+  id               Int             @id @default(autoincrement())
+  name             String
+  description      String
+  coursesPages     Curse[]
+  generalProgramId Int?
+  generalProgram   GeneralProgram? @relation(fields: [generalProgramId], references: [id])
+  updatedAt        DateTime        @updatedAt
+  createdAt        DateTime        @default(now())
 }
 
+//one curse with tasks
 model Curse {
   id               Int        @id @default(autoincrement())
   name             String
-  video            String
   descriptionCurse String
+  video            String?
+  theory           String?
   question         Question[]
   task             Task[]
   img              String?
   rating           Int?
 
-
   title       String?
   description String?
-  updatedAt   DateTime @updatedAt
-  createdAt   DateTime @default(now())
-
-  programId Int?
-  program Program? @relation(fields: [programId], references: [id])
+  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
+  program     Program[]
+  programId   Int?
 }
 
 model Task {
@@ -112,7 +113,7 @@ model Task {
   name        String
   description String
   curseId     Int
-  curse       Curse  @relation(fields: [curseId], references: [id])
+  curse       Curse[]
 }
 
 model Question {
@@ -120,13 +121,12 @@ model Question {
   name    String
   answer  String
   curseId Int
-  curse   Curse  @relation(fields: [curseId], references: [id])
+  curse   Curse[]
 }
 
-
 model Rating {
-id Int    @id @default(autoincrement())
-userId Int
-curseId Int
-rating Int
+  id      Int @id @default(autoincrement())
+  userId  Int
+  curseId Int
+  rating  Int
 }

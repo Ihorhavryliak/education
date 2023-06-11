@@ -1,11 +1,10 @@
-import { CourseSchema } from "~/schema/post.schema";
+import { z } from "zod";
+import { CourseSchema } from "~/schema/course.schema";
 import {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
 } from "~/server/api/trpc";
-import formidable from "formidable";
-import fs from "npm";
 
 export const courseRouter = createTRPCRouter({
   create: protectedProcedure.input(CourseSchema).mutation(({ ctx, input }) => {
@@ -15,7 +14,24 @@ export const courseRouter = createTRPCRouter({
         name: input.name,
         video: input.video,
         descriptionCurse: input.descriptionCurse,
+        img: input.img,
       },
     });
   }),
+  all: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.curse.findMany();
+  }),
+  getById: protectedProcedure
+    .input(z.object({ curseId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.curse.findFirst({
+        where: {
+          id: +input.curseId
+        },
+        include:{
+          task: true,
+          question: true,
+        }
+      });
+    }),
 });

@@ -1,4 +1,4 @@
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import {
   FormErrorMessage,
   FormLabel,
@@ -8,19 +8,16 @@ import {
   Container,
 } from "@chakra-ui/react";
 import { api } from "~/utils/api";
-import { CourseType } from "~/schema/course.schema";
+import { GeneralProgramType } from "~/schema/general.schema";
 
-
-
-export default function CreateCurse() {
+export default function CreateGeneralProgram() {
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm<CourseType>();
+  } = useForm<GeneralProgramType>();
 
-
-  const { mutate } = api.course.create.useMutation({
+  const { mutate } = api.generalProgram.create.useMutation({
     onSuccess: (err) => {
       if (!err) {
         console.log("Todo completed 🎉");
@@ -28,9 +25,8 @@ export default function CreateCurse() {
     },
   });
 
-  
-  const onSubmit: SubmitHandler<CourseType> = (values) => {
-    console.log(values, 'values>>>');
+  const onSubmit: SubmitHandler<GeneralProgramType> = (values) => {
+    console.log(values, "values>>>");
     mutate(values);
   };
 
@@ -38,10 +34,10 @@ export default function CreateCurse() {
     <Container>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl /* isInvalid={errors.root?.message} */>
-          <FormLabel htmlFor="name">First name</FormLabel>
+          <FormLabel htmlFor="name">Title Program</FormLabel>
           <Input
             id="name"
-            placeholder="name"
+            placeholder="Title Program"
             {...register("name", {
               required: "This is required",
               minLength: { value: 4, message: "Minimum length should be 4" },
@@ -52,32 +48,17 @@ export default function CreateCurse() {
           </FormErrorMessage>
         </FormControl>
         <FormControl /* isInvalid={errors.name} */>
-          <FormLabel htmlFor="video">video</FormLabel>
+          <FormLabel htmlFor="description">Description Program</FormLabel>
           <Input
-            id="video"
-            placeholder="video"
-            {...register("video", {
+            id="description"
+            placeholder="description"
+            {...register("description", {
               required: "This is required",
               minLength: { value: 4, message: "Minimum length should be 4" },
             })}
           />
           <FormErrorMessage>
-            {" "}
-            {errors.video && errors.video.message}
-          </FormErrorMessage>
-        </FormControl>
-        <FormControl /* isInvalid={errors.name} */>
-          <FormLabel htmlFor="descriptionCurse">descriptionCurse</FormLabel>
-          <Input
-            id="descriptionCurse"
-            placeholder="descriptionCurse"
-            {...register("descriptionCurse", {
-              required: "This is required",
-              minLength: { value: 4, message: "Minimum length should be 4" },
-            })}
-          />
-          <FormErrorMessage>
-            {errors.descriptionCurse && errors.descriptionCurse.message}
+            {errors.description && errors.description.message}
           </FormErrorMessage>
         </FormControl>
         <FormControl /* isInvalid={errors.name} */>
@@ -85,16 +66,16 @@ export default function CreateCurse() {
           <Input
             id="shortName"
             placeholder="Short Name"
-            {...register("img", {
+            {...register("shortName", {
               required: "This is required",
               minLength: { value: 4, message: "Minimum length should be 4" },
             })}
           />
           <FormErrorMessage>
-            {errors.descriptionCurse && errors.descriptionCurse.message}
+            {errors.shortName && errors.shortName.message}
           </FormErrorMessage>
         </FormControl>
-  
+
         <Button
           mt={4}
           colorScheme="teal"
