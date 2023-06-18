@@ -36,7 +36,7 @@ export default function Curse() {
                 <iframe
                   width="100%"
                   height="360"
-                  src={`https://www.youtube.com/embed/?autoplay=0&origin=http://example.com&controls=0&rel=1`}
+                  src={`https://www.youtube.com/embed/${data.video}`}
                 ></iframe>
               </Box>
             )}
@@ -44,7 +44,7 @@ export default function Curse() {
               <Heading as="h5" mb="1rem">
                 Теорія
               </Heading>
-             <Text>{data.theory}</Text> 
+             <Text>{data.descriptionCurse}</Text> 
             </Box>
 
             <Box mt="1.2rem">

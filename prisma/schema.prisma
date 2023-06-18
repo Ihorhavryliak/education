@@ -48,14 +48,18 @@ model Session {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  name          String?
-  email         String?   @unique
-  password      String
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id                Int       @id @default(autoincrement())
+  name              String?
+  email             String?   @unique
+  password          String
+  emailVerified     DateTime?
+  image             String?
+  accounts          Account[]
+  sessions          Session[]
+  isComplateProgram Program[]
+  isComplateCurse   Curse[]
+  isComplateTask Task[]
+  isComplateQuestion Question[]
 }
 
 model VerificationToken {
@@ -78,14 +82,15 @@ model GeneralProgram {
 
 // plan curse
 model Program {
-  id               Int             @id @default(autoincrement())
-  name             String
-  description      String
-  coursesPages     Curse[]
-  generalProgramId Int?
-  generalProgram   GeneralProgram? @relation(fields: [generalProgramId], references: [id])
-  updatedAt        DateTime        @updatedAt
-  createdAt        DateTime        @default(now())
+  id                Int             @id @default(autoincrement())
+  name              String
+  description       String
+  coursesPages      Curse[]
+  generalProgramId  Int?
+  generalProgram    GeneralProgram? @relation(fields: [generalProgramId], references: [id])
+  updatedAt         DateTime        @updatedAt
+  createdAt         DateTime        @default(now())
+  isComplateProgram User[]
 }
 
 //one curse with tasks
@@ -100,28 +105,32 @@ model Curse {
   img              String?
   rating           Int?
 
-  title       String?
-  description String?
-  updatedAt   DateTime  @updatedAt
-  createdAt   DateTime  @default(now())
-  program     Program[]
-  programId   Int?
+  title           String?
+  description     String?
+  updatedAt       DateTime  @updatedAt
+  createdAt       DateTime  @default(now())
+  program         Program[]
+  programId       Int?
+  sort            Int?
+  isComplateCurse User[]
 }
 
 model Task {
-  id          Int    @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
   description String
   curseId     Int
-  curse       Curse[]
+  curse       Curse    @relation(fields: [curseId], references: [id])
+  isComplateTask  User[]
 }
 
 model Question {
-  id      Int    @id @default(autoincrement())
-  name    String
-  answer  String
-  curseId Int
-  curse   Curse[]
+  id         Int      @id @default(autoincrement())
+  name       String
+  answer     String
+  curseId    Int
+  curse      Curse    @relation(fields: [curseId], references: [id])
+  isComplateQuestion User[]
 }
 
 model Rating {

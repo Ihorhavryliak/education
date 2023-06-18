@@ -26,11 +26,12 @@ export const courseRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.curse.findFirst({
         where: {
-          id: +input.curseId
+          id: +input.curseId,
         },
         include:{
           task: true,
           question: true,
+          program: true,
         }
       });
     }),

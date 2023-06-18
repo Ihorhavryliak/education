@@ -2,7 +2,6 @@ import { z } from "zod";
 import { ProgramSchema } from "~/schema/program.schema";
 import {
   createTRPCRouter,
-  publicProcedure,
   protectedProcedure,
 } from "~/server/api/trpc";
 
