@@ -1,6 +1,5 @@
 import styles from "./index.module.css";
 import { type NextPage } from "next";
-import Head from "next/head";
 
 import { signIn, signOut, useSession } from "next-auth/react";
 
@@ -19,6 +18,7 @@ const Home: NextPage = () => {
       </Box>
       <Box>
         <Link href="/admin">Admin</Link>
+        <AuthShowcase />
       </Box>
     </Container>
   );
@@ -26,7 +26,7 @@ const Home: NextPage = () => {
 
 export default Home;
 
-/* const AuthShowcase: React.FC = () => {
+function AuthShowcase() {
   const { data: sessionData } = useSession();
 
   const { data: secretMessage } = api.example.getSecretMessage.useQuery(
@@ -48,5 +48,4 @@ export default Home;
       </button>
     </div>
   );
-};
- */
+}

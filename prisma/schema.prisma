@@ -48,17 +48,17 @@ model Session {
 }
 
 model User {
-  id                Int       @id @default(autoincrement())
-  name              String?
-  email             String?   @unique
-  password          String
-  emailVerified     DateTime?
-  image             String?
-  accounts          Account[]
-  sessions          Session[]
-  isComplateProgram Program[]
-  isComplateCurse   Curse[]
-  isComplateTask Task[]
+  id                 Int        @id @default(autoincrement())
+  name               String?
+  email              String?    @unique
+  password           String?
+  emailVerified      DateTime?
+  image              String?
+  accounts           Account[]
+  sessions           Session[]
+  isComplateProgram  Program[]
+  isComplateCurse    Curse[]
+  isComplateTask     Task[]
   isComplateQuestion Question[]
 }
 
@@ -116,20 +116,20 @@ model Curse {
 }
 
 model Task {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String
-  curseId     Int
-  curse       Curse    @relation(fields: [curseId], references: [id])
-  isComplateTask  User[]
+  id             Int    @id @default(autoincrement())
+  name           String
+  description    String
+  curseId        Int
+  curse          Curse  @relation(fields: [curseId], references: [id])
+  isComplateTask User[]
 }
 
 model Question {
-  id         Int      @id @default(autoincrement())
-  name       String
-  answer     String
-  curseId    Int
-  curse      Curse    @relation(fields: [curseId], references: [id])
+  id                 Int    @id @default(autoincrement())
+  name               String
+  answer             String
+  curseId            Int
+  curse              Curse  @relation(fields: [curseId], references: [id])
   isComplateQuestion User[]
 }
 

@@ -1,14 +1,14 @@
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
   type NextAuthOptions,
   type DefaultSession,
 } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
-import EmailProvider from "next-auth/providers/email";
+import GoogleProvider from "next-auth/providers/google";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -46,36 +46,17 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
+  //debug: true,
   adapter: PrismaAdapter(prisma),
   providers: [
-    EmailProvider({
-      server: {
-        host: process.env.EMAIL_SERVER || "http://localhost:3000/",
-        port: 587,
-        auth: {
-          user: process.env.EMAIL_API_KEY || "",
-          password: process.env.EMAIL_PASSWORD || "",
-        },
-      },
-      from: process.env.EMAIL_FROM || "default@gmail.com",
-      ...(process.env.NODE_ENV !== "production"
-        ? {
-            sendVerificationRequest({ url }) {
-              console.log("LOGIN_LINK", url);
-            },
-          }
-        : {}),
-    }),
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret:  env.GOOGLE_CLIENT_SECRET,
+    })
   ],
+  pages:{
+    signIn: '/login'
+  }
 };
 
 /**
