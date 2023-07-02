@@ -24,7 +24,7 @@ export default function CursePage() {
   const pathname = usePathname();
   const session = useSession();
   const userId = session?.data?.user?.id as number;
-  console.log(session, 'session>>')
+
   const { mutate, isLoading } = api.complete.create.useMutation({
     onSuccess: () => {
       //update data
@@ -51,17 +51,14 @@ export default function CursePage() {
 
   const handleToPage = async (pageId: number) => {
     const isInCompetes = competesId?.find((ids) => ids.programId === pageId);
-    debugger;
     if (!isInCompetes) {
-      debugger;
       mutate({ userId: userId, pageId });
       await router.push(`${pathname}/${pageId}`);
     } else {
       await router.push(`${pathname}/${pageId}`);
     }
   };
-  console.log(competesId, "competesId");
-  console.log(data, "data");
+
   return (
     <Layout>
       <Container pt="3rem ">

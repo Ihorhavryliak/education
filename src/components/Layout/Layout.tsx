@@ -21,8 +21,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
       <main className={roboto.className}>
         <Header />
-        {pathname !== "/courses" && <BackButton />}
-        <Container>{children}</Container>
+        {/* {pathname !== "/courses" && <BackButton />} */}
+        <Container mt='1rem'>{children}</Container>
       </main>
   );
 }
