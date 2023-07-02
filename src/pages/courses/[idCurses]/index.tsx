@@ -1,7 +1,4 @@
-import {
-  CheckCircleIcon,
-  ExternalLinkIcon,
-} from "@chakra-ui/icons";
+import { CheckCircleIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { Link } from "@chakra-ui/next-js";
 import {
   Accordion,
@@ -10,24 +7,61 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Button,
   Container,
   Flex,
   Heading,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 import React from "react";
 import { Layout } from "~/components/Layout";
 import { api } from "~/utils/api";
 
-
-
 export default function CursePage() {
-  const router = useRouter()
+  const router = useRouter();
   const pathname = usePathname();
+  const session = useSession();
+  const userId = session?.data?.user?.id as number;
+  console.log(session, 'session>>')
+  const { mutate, isLoading } = api.complete.create.useMutation({
+    onSuccess: () => {
+      //update data
+    },
+    onError: (e) => {
+      const errorMessage = e.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        console.log(errorMessage[0]);
+      } else {
+        console.log("Failed! Please try again later.");
+      }
+    },
+  });
 
-  const { data } = api.program.all.useQuery({id: router.query.idCurses ? router.query.idCurses as string : '' });
+  const { data } = api.program.all.useQuery({
+    id: router.query.idCurses ? (router.query.idCurses as string) : "",
+  });
+  const { data: competesId } = api.complete.findAllByUserId.useQuery(
+    {
+      userId: userId,
+    },
+    { enabled: userId ? true : false }
+  );
 
+  const handleToPage = async (pageId: number) => {
+    const isInCompetes = competesId?.find((ids) => ids.programId === pageId);
+    debugger;
+    if (!isInCompetes) {
+      debugger;
+      mutate({ userId: userId, pageId });
+      await router.push(`${pathname}/${pageId}`);
+    } else {
+      await router.push(`${pathname}/${pageId}`);
+    }
+  };
+  console.log(competesId, "competesId");
+  console.log(data, "data");
   return (
     <Layout>
       <Container pt="3rem ">
@@ -87,7 +121,13 @@ export default function CursePage() {
                                     fontWeight="900"
                                     fontSize={"20px"}
                                   /> */}
-                          70%
+                          {mainCur &&
+                            Math.round(mainCur?.coursesPages?.filter((cursePage) =>
+                              competesId?.some(
+                                (compete) =>
+                                  compete.completeProgramId === cursePage.id
+                              )
+                            ).length / mainCur?.coursesPages.length * 100)}
                         </Box>
                         <Heading
                           as="h4"
@@ -120,6 +160,13 @@ export default function CursePage() {
                           >
                             <Flex alignItems={"center"} gap="1rem">
                               <CheckCircleIcon
+                                color={
+                                  competesId?.find(
+                                    (ids) => ids.programId === page.id
+                                  )?.completeProgramId
+                                    ? "green"
+                                    : "gray.100"
+                                }
                                 fontWeight="900"
                                 fontSize={"24px"}
                               />
@@ -133,17 +180,13 @@ export default function CursePage() {
                               </Heading>
                             </Flex>
 
-                            <Link
+                            <Button
+                              onClick={() => handleToPage(page.id)}
                               color="blue.500"
                               fontSize="1.2125rem"
-                              href={`${pathname}/${page.id}`}
-                              _hover={{
-                                color: "blue.300",
-                                transition: "all ease-out 0.2s",
-                              }}
                             >
                               <ExternalLinkIcon />
-                            </Link>
+                            </Button>
                           </Flex>
                         </AccordionPanel>
                       );

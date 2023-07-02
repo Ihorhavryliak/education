@@ -2,11 +2,11 @@ import { GeneralProgramSchema } from "~/schema/general.schema";
 import {
   createTRPCRouter,
   publicProcedure,
-  protectedProcedure,
+  protectedAdminProcedure,
 } from "~/server/api/trpc";
 
 export const generalProgramRouter = createTRPCRouter({
-  create: protectedProcedure
+  create: protectedAdminProcedure
     .input(GeneralProgramSchema)
     .mutation(({ ctx, input }) => {
       return ctx.prisma.generalProgram.create({

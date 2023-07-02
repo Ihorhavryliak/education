@@ -4,20 +4,22 @@ import {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
+  protectedAdminProcedure,
 } from "~/server/api/trpc";
 
 export const courseRouter = createTRPCRouter({
-  create: protectedProcedure.input(CourseSchema).mutation(({ ctx, input }) => {
-    // throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
-    return ctx.prisma.curse.create({
-      data: {
-        name: input.name,
-        video: input.video,
-        descriptionCurse: input.descriptionCurse,
-        img: input.img,
-      },
-    });
-  }),
+  create: protectedAdminProcedure
+    .input(CourseSchema)
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.curse.create({
+        data: {
+          name: input.name,
+          video: input.video,
+          descriptionCurse: input.descriptionCurse,
+          img: input.img,
+        },
+      });
+    }),
   all: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.curse.findMany();
   }),
@@ -28,11 +30,11 @@ export const courseRouter = createTRPCRouter({
         where: {
           id: +input.curseId,
         },
-        include:{
+        include: {
           task: true,
           question: true,
           program: true,
-        }
+        },
       });
     }),
 });

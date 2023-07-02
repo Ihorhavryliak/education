@@ -19,16 +19,17 @@ import GoogleProvider from "next-auth/providers/google";
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
-      id: string;
+      id: number;
+      role: number
       // ...other properties
-      // role: UserRole;
+      //role: number;
     } & DefaultSession["user"];
   }
 
-  // interface User {
+ interface User {
   //   // ...other properties
-  //   // role: UserRole;
-  // }
+  role: number;
+  }
 }
 
 /**
@@ -41,8 +42,10 @@ export const authOptions: NextAuthOptions = {
     session: ({ session, user }) => ({
       ...session,
       user: {
-        ...session.user,
         id: user.id,
+        role: user.role,
+        name: user.name,
+        image: user.image,
       },
     }),
   },
@@ -56,7 +59,8 @@ export const authOptions: NextAuthOptions = {
   ],
   pages:{
     signIn: '/login'
-  }
+  },
+  debug: true
 };
 
 /**

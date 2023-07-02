@@ -8,6 +8,8 @@ import { Box, Container } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
 
 const Home: NextPage = () => {
+  const { data: session } = useSession();
+  console.log(session)
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
   return (
@@ -29,16 +31,10 @@ export default Home;
 function AuthShowcase() {
   const { data: sessionData } = useSession();
 
-  const { data: secretMessage } = api.example.getSecretMessage.useQuery(
-    undefined, // no input
-    { enabled: sessionData?.user !== undefined }
-  );
-
   return (
     <div className={styles.authContainer}>
       <p className={styles.showcaseText}>
         {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-        {secretMessage && <span> - {secretMessage}</span>}
       </p>
       <button
         className={styles.loginButton}

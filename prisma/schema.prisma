@@ -1,16 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-  // Further reading:
-  // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-  // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
   url      = env("DATABASE_URL")
 }
 
@@ -20,19 +13,18 @@ model Example {
   updatedAt DateTime @updatedAt
 }
 
-// Necessary for Next auth
 model Account {
   id                Int     @id @default(autoincrement())
   userId            Int
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? // @db.Text
-  access_token      String? // @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? // @db.Text
+  id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -48,18 +40,15 @@ model Session {
 }
 
 model User {
-  id                 Int        @id @default(autoincrement())
-  name               String?
-  email              String?    @unique
-  password           String?
-  emailVerified      DateTime?
-  image              String?
-  accounts           Account[]
-  sessions           Session[]
-  isComplateProgram  Program[]
-  isComplateCurse    Curse[]
-  isComplateTask     Task[]
-  isComplateQuestion Question[]
+  id            Int       @id @default(autoincrement())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Int?
+  accounts      Account[]
+  sessions      Session[]
 }
 
 model VerificationToken {
@@ -74,63 +63,59 @@ model GeneralProgram {
   id           Int       @id @default(autoincrement())
   name         String
   description  String
-  shortName    String
-  coursesPages Program[]
   updatedAt    DateTime  @updatedAt
   createdAt    DateTime  @default(now())
+  shortName    String
+  url          String?   @unique
+  coursesPages Program[]
 }
 
-// plan curse
 model Program {
-  id                Int             @id @default(autoincrement())
-  name              String
-  description       String
-  coursesPages      Curse[]
-  generalProgramId  Int?
-  generalProgram    GeneralProgram? @relation(fields: [generalProgramId], references: [id])
-  updatedAt         DateTime        @updatedAt
-  createdAt         DateTime        @default(now())
-  isComplateProgram User[]
+  id               Int             @id @default(autoincrement())
+  name             String
+  description      String
+  generalProgramId Int?
+  updatedAt        DateTime        @updatedAt
+  createdAt        DateTime        @default(now())
+  url              String?         @unique
+  generalProgram   GeneralProgram? @relation(fields: [generalProgramId], references: [id])
+  coursesPages     Curse[]         @relation("CurseToProgram")
 }
 
-//one curse with tasks
 model Curse {
   id               Int        @id @default(autoincrement())
   name             String
   descriptionCurse String
-  video            String?
-  theory           String?
-  question         Question[]
-  task             Task[]
   img              String?
   rating           Int?
-
-  title           String?
-  description     String?
-  updatedAt       DateTime  @updatedAt
-  createdAt       DateTime  @default(now())
-  program         Program[]
-  programId       Int?
-  sort            Int?
-  isComplateCurse User[]
+  title            String?
+  description      String?
+  updatedAt        DateTime   @updatedAt
+  createdAt        DateTime   @default(now())
+  programId        Int?
+  theory           String?
+  video            String?
+  sort             Int?
+  url              String?    @unique
+  question         Question[]
+  task             Task[]
+  program          Program[]  @relation("CurseToProgram")
 }
 
 model Task {
-  id             Int    @id @default(autoincrement())
-  name           String
-  description    String
-  curseId        Int
-  curse          Curse  @relation(fields: [curseId], references: [id])
-  isComplateTask User[]
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+  curseId     Int
+  curse       Curse  @relation(fields: [curseId], references: [id])
 }
 
 model Question {
-  id                 Int    @id @default(autoincrement())
-  name               String
-  answer             String
-  curseId            Int
-  curse              Curse  @relation(fields: [curseId], references: [id])
-  isComplateQuestion User[]
+  id      Int    @id @default(autoincrement())
+  name    String
+  answer  String
+  curseId Int
+  curse   Curse  @relation(fields: [curseId], references: [id])
 }
 
 model Rating {
@@ -138,4 +123,18 @@ model Rating {
   userId  Int
   curseId Int
   rating  Int
+}
+
+model Complete {
+  id     Int  @id @default(autoincrement())
+  userId Int?
+  completeProgramId Int?
+
+  generalProgramId Int?
+  programId        Int?
+  courseId         Int?
+
+  theoryId         Int?
+  taskId           Int?
+  questionId       Int?
 }
