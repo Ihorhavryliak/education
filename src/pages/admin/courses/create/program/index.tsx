@@ -17,7 +17,7 @@ import { ProgramType } from "~/schema/program.schema";
 import { MultiValue, Select } from "chakra-react-select";
 import { ChangeEvent, FormEvent, useId, useState } from "react";
 import { Curse } from "@prisma/client";
-import InputType from "~/hooks/input";
+import InputType from "~/components/InputType/InputType";
 import { Layout } from "~/components/Layout";
 
 interface ColorOption {

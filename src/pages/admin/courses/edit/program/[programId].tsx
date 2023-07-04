@@ -15,10 +15,11 @@ import {
 import { api } from "~/utils/api";
 import { ProgramType } from "~/schema/program.schema";
 import { MultiValue, Select } from "chakra-react-select";
-import { ChangeEvent, FormEvent, useId, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useId, useState } from "react";
 import { Curse } from "@prisma/client";
-import InputType from "~/hooks/input";
+import InputType from "~/components/InputType/InputType";
 import { Layout } from "~/components/Layout";
+import { useRouter } from "next/router";
 
 interface ColorOption {
   label: string;
@@ -26,7 +27,9 @@ interface ColorOption {
 }
 
 export default function CreateProgram() {
-  const { mutate } = api.program.create.useMutation({
+  const router = useRouter();
+  const programId = router?.query?.programId as string;
+  const { mutate } = api.program.update.useMutation({
     onSuccess: (err) => {
       if (!err) {
         console.log("Todo completed 🎉");
@@ -36,6 +39,13 @@ export default function CreateProgram() {
 
   const course = api.course.all.useQuery();
   const mainProgram = api.generalProgram.all.useQuery();
+  const { data: program } = api.program.findById.useQuery(
+    {
+      id: programId ? +programId : 1,
+    },
+    { enabled: programId ? true : false }
+  );
+
   //chose tags multiple
   const [choseOption, setChoseOption] = useState<MultiValue<ColorOption>>([]);
   const handleChoseOption = (e: MultiValue<ColorOption>) => {
@@ -45,9 +55,32 @@ export default function CreateProgram() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [generalProgram, setGeneralProgram] = useState("");
+  const [order, setOrder] = useState("");
   const handleGeneralProgram = (text: string) => {
     setGeneralProgram(text);
   };
+
+  useEffect(() => {
+    if (program?.name) {
+      setName(program.name);
+    }
+    if (program?.description) {
+      setDescription(program.description);
+    }
+    if (program?.generalProgramId) {
+      setGeneralProgram(program.generalProgramId.toString());
+    }
+    if (program?.coursesPages) {
+      const newCoursesPages = program.coursesPages.map((coursePages) => {
+        return { label: coursePages.name, value: coursePages.id.toString() };
+      });
+      setChoseOption(newCoursesPages);
+    }
+    if (program?.order) {
+      const orderProgram = program.order ? program.order : (1 as number);
+      setOrder(orderProgram.toString());
+    }
+  }, [program]);
 
   //send data
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -57,10 +90,12 @@ export default function CreateProgram() {
       return { id: +option.value } as { id: number };
     });
     const data = {
+      id: programId ? +programId : 1,
       generalProgramId: +generalProgram,
       name,
       description,
       coursesPages: choseValue,
+      order: order ? +order : 1,
     };
     mutate(data);
   };
@@ -81,6 +116,7 @@ export default function CreateProgram() {
             onChange={(e) => handleChoseOption(e)}
             instanceId={useId()}
             isMulti
+            value={choseOption}
             options={
               course.data
                 ? course.data.map((opt) => {
@@ -88,11 +124,12 @@ export default function CreateProgram() {
                   })
                 : []
             }
-            placeholder="Select some colors..."
+            placeholder="Select Programs..."
           />
           <Text mb="8px">Select main program</Text>
           <ChakraSelect
-            placeholder="Select option"
+            value={generalProgram}
+            placeholder="Select main program"
             onChange={(e) => handleGeneralProgram(e.target.value)}
           >
             {mainProgram.data &&
@@ -102,6 +139,13 @@ export default function CreateProgram() {
                 </option>
               ))}
           </ChakraSelect>
+          <Text mb="8px">order:</Text>
+          <InputType
+            placeholder="order"
+            type="number"
+            value={order}
+            onChange={setOrder}
+          />
           <Button mt={4} colorScheme="teal" type="submit">
             Submit
           </Button>

@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { type FormEvent, useState } from "react";
 import { Layout } from "~/components/Layout";
-import InputType from "~/hooks/input";
+import InputType from "~/components/InputType/InputType";
 import { api } from "~/utils/api";
 
 export default function CreateGeneralProgram() {

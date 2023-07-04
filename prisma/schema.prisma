@@ -71,7 +71,8 @@ model GeneralProgram {
 }
 
 model Program {
-  id               Int             @id @default(autoincrement())
+  id Int @id @default(autoincrement())
+
   name             String
   description      String
   generalProgramId Int?
@@ -80,6 +81,7 @@ model Program {
   url              String?         @unique
   generalProgram   GeneralProgram? @relation(fields: [generalProgramId], references: [id])
   coursesPages     Curse[]         @relation("CurseToProgram")
+  order            Int?
 }
 
 model Curse {
@@ -104,10 +106,13 @@ model Curse {
 
 model Task {
   id          Int    @id @default(autoincrement())
+  video       String?
+  solution    String?
   name        String
   description String
   curseId     Int
   curse       Curse  @relation(fields: [curseId], references: [id])
+  sort    Int?
 }
 
 model Question {
@@ -115,6 +120,7 @@ model Question {
   name    String
   answer  String
   curseId Int
+  sort    Int?
   curse   Curse  @relation(fields: [curseId], references: [id])
 }
 
@@ -126,15 +132,16 @@ model Rating {
 }
 
 model Complete {
-  id     Int  @id @default(autoincrement())
-  userId Int?
+  id                Int  @id @default(autoincrement())
+  userId            Int?
   completeProgramId Int?
 
   generalProgramId Int?
   programId        Int?
   courseId         Int?
 
-  theoryId         Int?
-  taskId           Int?
-  questionId       Int?
+  theoryId   Int?
+  taskId     Int?
+  solutionTask String?
+  questionId Int?
 }

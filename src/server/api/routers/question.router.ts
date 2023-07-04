@@ -7,7 +7,7 @@ import {
   protectedAdminProcedure,
 } from "~/server/api/trpc";
 
-export const courseRouter = createTRPCRouter({
+export const questionRouter = createTRPCRouter({
   create: protectedAdminProcedure
     .input(CourseSchema)
     .mutation(({ ctx, input }) => {
@@ -20,33 +20,31 @@ export const courseRouter = createTRPCRouter({
         },
       });
     }),
+
+
   update: protectedAdminProcedure
     .input(
       z.object({
-        name: z.string(),
-        video: z.string(),
-        descriptionCurse: z.string(),
-        img: z.string(),
         id: z.number(),
+        name: z.string(),
+        answer: z.string(),
         sort: z.number(),
       })
     )
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.curse.update({
+      return ctx.prisma.question.update({
         where: {
           id: input.id,
         },
         data: {
           name: input.name,
-          video: input.video,
-          descriptionCurse: input.descriptionCurse,
-          img: input.img,
+          answer: input.answer,
           sort: input.sort,
         },
       });
     }),
   all: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.curse.findMany();
+    return await ctx.prisma.question.findMany();
   }),
   getById: protectedProcedure
     .input(z.object({ curseId: z.string() }))
@@ -62,7 +60,5 @@ export const courseRouter = createTRPCRouter({
         },
       });
     }),
-  getQuestion: protectedAdminProcedure.query(async ({ ctx, input }) => {
-    return await ctx.prisma.question.findMany();
-  }),
+
 });

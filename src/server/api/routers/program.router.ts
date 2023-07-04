@@ -21,6 +21,37 @@ export const programRouter = createTRPCRouter({
         },
       });
     }),
+  update: protectedAdminProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        description: z.string(),
+        generalProgramId: z.number(),
+        order: z.number(),
+        coursesPages: z.array(
+          z.object({
+            id: z.number(),
+          })
+        ),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.program.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+          description: input.description,
+          generalProgramId: input.generalProgramId,
+          order: input.order,
+          coursesPages: {
+            connect: input.coursesPages,
+          },
+        },
+      });
+    }),
   all: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -31,14 +62,20 @@ export const programRouter = createTRPCRouter({
         include: {
           coursesPages: true,
         },
+        orderBy: {
+          order: 'asc'
+        }
       });
       const mainProgram = await ctx.prisma.generalProgram.findFirst({
         where: {
           id: +input.id,
-        },
+        }
       });
       return { program, mainProgram };
     }),
+  allProgram: protectedAdminProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.program.findMany();
+  }),
 
   markDone: protectedProcedure
     .input(ProgramSchema)
@@ -46,6 +83,19 @@ export const programRouter = createTRPCRouter({
       return ctx.prisma.user.create({
         data: {
           name: input.name,
+        },
+      });
+    }),
+
+  findById: protectedAdminProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.program.findFirst({
+        where: {
+          id: input.id,
+        },
+        include: {
+          coursesPages: true,
         },
       });
     }),

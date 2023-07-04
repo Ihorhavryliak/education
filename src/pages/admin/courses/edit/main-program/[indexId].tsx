@@ -8,13 +8,13 @@ import {
 import { useRouter } from "next/router";
 import { type FormEvent, useState, useCallback, useEffect } from "react";
 import { Layout } from "~/components/Layout";
-import InputType from "~/hooks/input";
+import InputType from "~/components/InputType/InputType";
 import { api } from "~/utils/api";
 
 export default function CreateGeneralProgram() {
   const router = useRouter();
   const mainProgramId = router?.query?.indexId as string;
-  console.log(mainProgramId);
+
   const { mutate } = api.generalProgram.update.useMutation({
     onSuccess: (err) => {
       if (!err) {
@@ -28,7 +28,7 @@ export default function CreateGeneralProgram() {
     },
     { enabled: mainProgramId ? true : false }
   );
-  console.log(mainProgram, "mainProgram");
+
 
   //chose namesx
   const [name, setName] = useState("");

@@ -3,6 +3,8 @@ import { courseRouter } from "~/server/api/routers/course.router";
 import { generalProgramRouter } from "./routers/general.router";
 import { programRouter } from "./routers/program.router";
 import { completeRouter } from "./routers/complete.route";
+import { questionRouter } from "./routers/question.router";
+import { taskRouter } from "./routers/task.router";
 
 /**
  * This is the primary router for your server.
@@ -14,6 +16,8 @@ export const appRouter = createTRPCRouter({
   generalProgram: generalProgramRouter,
   program: programRouter,
   complete: completeRouter,
+  question: questionRouter,
+  task: taskRouter
 });
 
 // export type definition of API

@@ -20,11 +20,9 @@ export default function Admin() {
   }, []);
 
   const { data: generalProgram } = api.generalProgram.all.useQuery();
-  const { data: program } = api.program.all.useQuery({
-    id: router.query.idCurses ? (router.query.idCurses as string) : "",
-  }, {});
+  const { data: program } = api.program.allProgram.useQuery();
   const { data: courses } = api.course.all.useQuery();
-
+ 
   return (
     <Layout>
       <Container>
@@ -39,9 +37,9 @@ export default function Admin() {
           </Link>
         </Box>
         <Box>
-          <Link href={"/admin/courses/create"}>Create curse</Link>
+          <Link href={"/admin/courses/create"}>Create Lesson</Link>
         </Box>
-        <Box>curses</Box>
+
 
         <Box>
           <Heading as="h2"> generalProgram</Heading>
@@ -58,6 +56,46 @@ export default function Admin() {
                   <Box> {generalProgram.name}</Box>
                   <Box> {generalProgram.description}</Box>
                   <Link href={`/admin/courses/edit/main-program/${generalProgram.id}`}>Edit</Link>
+                </Box>
+              );
+            })}
+          </Flex>
+        </Box>
+        <Box  mt='2rem'>
+          <Heading as="h2" mb='1rem'> Program</Heading>
+          <Flex gap="10px">
+            {program?.map((program) => {
+              return (
+                <Box
+                  key={program.id}
+                  border={"1px"}
+                  borderColor={"blackAlpha.200"}
+                  p="1rem"
+                  fontSize={"16px"}
+                >
+                  <Box> {program.name}</Box>
+                  <Box> {program.description}</Box>
+                  <Link href={`/admin/courses/edit/program/${program.id}`}>Edit</Link>
+                </Box>
+              );
+            })}
+          </Flex>
+        </Box>
+        <Box  mt='2rem'>
+          <Heading as="h2" mb='1rem'> Lesson</Heading>
+          <Flex gap="10px">
+            {courses?.map((course) => {
+              return (
+                <Box
+                  key={course.id}
+                  border={"1px"}
+                  borderColor={"blackAlpha.200"}
+                  p="1rem"
+                  fontSize={"16px"}
+                >
+                  <Box> {course.name}</Box>
+                  <Box> {course.description}</Box>
+                  <Link href={`/admin/courses/edit/${course.id}`}>Edit</Link>
                 </Box>
               );
             })}
