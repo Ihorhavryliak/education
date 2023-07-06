@@ -71,13 +71,13 @@ export default function CreateCurse() {
       setName(lessonData?.name);
     }
     if (lessonData?.video) {
-      setName(lessonData?.video);
+      setVideo(lessonData?.video);
     }
     if (lessonData?.description) {
-      setName(lessonData?.description);
+      setDescription(lessonData?.description);
     }
     if (lessonData?.img) {
-      setName(lessonData?.img);
+      setShortName(lessonData?.img);
     }
     if (lessonData?.theory) {
       setTheory(lessonData?.theory);
@@ -141,6 +141,7 @@ export default function CreateCurse() {
       img: shortName,
       id: curseId ? +curseId : 1,
       sort: +sort,
+      theory: theory
     };
     mutate(data);
   };
@@ -168,27 +169,30 @@ export default function CreateCurse() {
     <Layout>
       <Container>
         <form onSubmit={onSubmit}>
-          <FormControl>
+          <FormControl my='8px'>
             <FormLabel htmlFor="name">First name</FormLabel>
             <InputType value={name} onChange={setName} placeholder="name" />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl my='8px'>
             <FormLabel htmlFor="video">video</FormLabel>
             <InputType value={video} onChange={setVideo} placeholder="video" />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl my='8px'>
             <FormLabel htmlFor="descriptionCurse">descriptionCurse</FormLabel>
             <InputType
+            height="200px"
+            type="textarea"
+            size="lg"
               value={description}
               onChange={setDescription}
               placeholder="description curse"
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="shortName">Short Name</FormLabel>
+          <FormControl my='8px'>
+            <FormLabel htmlFor="shortName">Image</FormLabel>
             <InputType
               value={shortName}
               onChange={setShortName}
@@ -196,32 +200,35 @@ export default function CreateCurse() {
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl my='8px'>
             <FormLabel htmlFor="sort">Sort</FormLabel>
             <InputType value={sort} onChange={setSort} placeholder="sort" />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl my='8px'>
             <FormLabel htmlFor="sort">Theory</FormLabel>
             <InputType
+                height="200px"
+                type="textarea"
+                size="lg"
               value={theory}
               onChange={setTheory}
               placeholder="theory"
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl my='8px'>
             <FormLabel htmlFor="sort">url</FormLabel>
             <InputType value={url} onChange={setUrl} placeholder="url" />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
 
           <Button mt={4} colorScheme="teal" type="submit">
-            Submit
+            Зберегти
           </Button>
         </form>
 
-        <Text mt="2rem" mb="8px">
+        <Text mt="2rem" mb="8px" my='8px'>
           Question
         </Text>
         <QuestionList
@@ -236,7 +243,7 @@ export default function CreateCurse() {
           setQuestionSort={setQuestionSort}
           onSubmitQuestion={onSubmitQuestion}
         />
-        <Text mt="2rem" mb="8px">
+        <Text mt="2rem" mb="8px" my='8px'>
           Task
         </Text>
         <TaskList

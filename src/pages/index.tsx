@@ -5,23 +5,23 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 import { Box, Container } from "@chakra-ui/react";
 import { Link } from "@chakra-ui/next-js";
+import { Layout } from "~/components/Layout";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
-  console.log(session)
+
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
   return (
-    <Container>
-      <Box>dsfsd</Box>
-      <Box>
+    <Layout>
+      <Box my={"25px"}>
+        <Link href="/admin">Admin</Link>
+      </Box>
+      <Box my={"25px"}>
         <Link href="/courses">courses</Link>
       </Box>
-      <Box>
-        <Link href="/admin">Admin</Link>
-        <AuthShowcase />
-      </Box>
-    </Container>
+      <AuthShowcase />
+    </Layout>
   );
 };
 

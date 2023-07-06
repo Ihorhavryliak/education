@@ -45,7 +45,7 @@ export default function CreateGeneralProgram() {
               value={name}
               onChange={setName}
             />
-            Q <FormErrorMessage></FormErrorMessage>
+            <FormErrorMessage></FormErrorMessage>
           </FormControl>
           <FormControl>
             <FormLabel htmlFor="description">Description Program</FormLabel>

@@ -9,14 +9,21 @@ import {
 
 export const taskRouter = createTRPCRouter({
   create: protectedAdminProcedure
-    .input(CourseSchema)
+    .input(  z.object({
+      name: z.string(),
+      sort: z.number(),
+      description: z.string(),
+      video: z.string(),
+      curseId: z.number()
+    }))
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.curse.create({
+      return ctx.prisma.task.create({
         data: {
           name: input.name,
           video: input.video,
-          descriptionCurse: input.descriptionCurse,
-          img: input.img,
+          description: input.description,
+          sort: input.sort,
+          curseId: input.curseId,
         },
       });
     }),
@@ -41,6 +48,23 @@ export const taskRouter = createTRPCRouter({
           description: input.description,
           sort: input.sort,
           video: input.video,
+        },
+      });
+    }),
+    updateSolution: protectedAdminProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        solution: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.task.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          solution: input.solution,
         },
       });
     }),

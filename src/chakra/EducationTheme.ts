@@ -14,8 +14,10 @@ const color = {
     100: "#fefefe",
     200: "#747579",
     300: "#eff1f2",
+    400: "#a1a1a8",
     500: "#9a9ea4",
     800: "#24292d",
+    900: "#2a2c31"
   },
   reds: {
     100: "#d6293e",
@@ -27,13 +29,21 @@ const color = {
   },
   darks: {
     100: "rgba(29, 58, 83, 0.15)",
+    200: "#222529",
+    300: "#191b1d",
+    400: "#0b0a12",
   },
+  primary:{
+    100: "#8e85e6",
+    200: "rgba(142, 133, 230, 0.1)",
+  }
+
 };
 
 const typographyObj = {
   fonts: {
-    body: "Roboto, sans-serif",
-    heading: "Roboto, sans-serif",
+    heading: `'Open Sans', sans-serif`,
+    body: `'Raleway', sans-serif`,
   },
 };
 
@@ -41,14 +51,14 @@ const defaults = {
   styles: {
     global: {
       html: {
-        fontSize: "14px",
+        fontSize: "16px",
       },
       "html, body": {
         minHeight: "69rem",
-        color: "grays.200",
+        color: "grays.400",
         maxWidth: "100%",
         overflowX: "hidden",
-        backgroundColor: "gray.700", // Add the desired background color
+        backgroundColor: "darks.200", // Add the desired background color
         marginBottom:'3rem',
       },
     },

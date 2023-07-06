@@ -29,6 +29,7 @@ export const courseRouter = createTRPCRouter({
         img: z.string(),
         id: z.number(),
         sort: z.number(),
+        theory: z.string(),
       })
     )
     .mutation(({ ctx, input }) => {
@@ -42,6 +43,7 @@ export const courseRouter = createTRPCRouter({
           descriptionCurse: input.descriptionCurse,
           img: input.img,
           sort: input.sort,
+          theory: input.theory,
         },
       });
     }),

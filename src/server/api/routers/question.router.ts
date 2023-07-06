@@ -7,16 +7,22 @@ import {
   protectedAdminProcedure,
 } from "~/server/api/trpc";
 
+
 export const questionRouter = createTRPCRouter({
   create: protectedAdminProcedure
-    .input(CourseSchema)
+    .input(  z.object({
+      curseId: z.number(),
+      name: z.string(),
+      answer: z.string(),
+      sort: z.number(),
+    }))
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.curse.create({
+      return ctx.prisma.question.create({
         data: {
           name: input.name,
-          video: input.video,
-          descriptionCurse: input.descriptionCurse,
-          img: input.img,
+          answer: input.answer,
+          sort: input.sort,
+          curseId: input.curseId,
         },
       });
     }),

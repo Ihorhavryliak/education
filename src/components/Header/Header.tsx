@@ -8,13 +8,13 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
-import { useDisclosure } from "@chakra-ui/react";
+
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Image, Link } from "@chakra-ui/next-js";
 export default function Header() {
   return (
-    <Container bg='white'>
-      <Flex justifyContent={"space-between"} py='30px' alignItems={'center'}>
+    <Container borderRadius={'0'} mt={'1rem'} w={'100%'} maxWidth='100%'>
+      <Flex justifyContent={"space-between"}  alignItems={'center'}>
         <Box >
          <Link href='/'> <Image width={200} height={30} alt="logo" src={"/logo.svg"} /></Link>
         </Box>

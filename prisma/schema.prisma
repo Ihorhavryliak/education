@@ -105,14 +105,16 @@ model Curse {
 }
 
 model Task {
-  id          Int    @id @default(autoincrement())
-  video       String?
-  solution    String?
-  name        String
-  description String
-  curseId     Int
-  curse       Curse  @relation(fields: [curseId], references: [id])
-  sort    Int?
+  id             Int     @id @default(autoincrement())
+  video          String?
+  videoSolution  String?
+  solution       String?
+  lessonSolution String?
+  name           String
+  description    String
+  curseId        Int
+  curse          Curse   @relation(fields: [curseId], references: [id])
+  sort           Int?
 }
 
 model Question {
@@ -140,8 +142,8 @@ model Complete {
   programId        Int?
   courseId         Int?
 
-  theoryId   Int?
-  taskId     Int?
+  theoryId     Int?
+  taskId       Int?
   solutionTask String?
-  questionId Int?
+  questionId   Int?
 }

@@ -1028,6 +1028,16 @@
   dependencies:
     "@floating-ui/core" "^1.2.6"
 
+"@fontsource/open-sans@^5.0.4":
+  version "5.0.4"
+  resolved "https://registry.npmjs.org/@fontsource/open-sans/-/open-sans-5.0.4.tgz"
+  integrity sha512-yUm+NNFElQ0k2J15SXXETmKMILIUawYF/MxFREwBtRItxBszIw68zM4+ipSulwJfFl2k9jITSpDPYr2nqBoshQ==
+
+"@fontsource/raleway@^5.0.4":
+  version "5.0.4"
+  resolved "https://registry.npmjs.org/@fontsource/raleway/-/raleway-5.0.4.tgz"
+  integrity sha512-KAM+jctQ/SeZRnYscB0gXn7hKvQDfPqJfKmpweay3Vswv8qsiyFzSoMY96EVkoeYRqQ4mVIT1hN4gGSq8tDArA==
+
 "@humanwhocodes/config-array@^0.11.10":
   version "0.11.10"
   resolved "https://registry.npmjs.org/@humanwhocodes/config-array/-/config-array-0.11.10.tgz"

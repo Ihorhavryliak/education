@@ -59,13 +59,13 @@ export default function Courses() {
                       </Text>
                     </Text>
                   </Box>
-                  <Box p="0 1rem 1rem 1rem">
+{/*                   <Box p="0 1rem 1rem 1rem">
                     <Divider my="1rem " borderColor="grays.500" />
                     <Flex justifyContent={"space-between"}>
                       <Box>12h 56m</Box>
                       <Box>15 lectures</Box>
                     </Flex>
-                  </Box>
+                  </Box> */}
                 </Box>
               </Box>
             );

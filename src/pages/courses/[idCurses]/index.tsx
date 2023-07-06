@@ -61,18 +61,19 @@ export default function CursePage() {
 
   return (
     <Layout>
-      <Container pt="3rem ">
+    
         <Heading as="h2" mb="1.5rem">
           {data && data.mainProgram?.name}
         </Heading>
         <Heading
-          bg="white"
+
           as="h3"
           fontSize={"1.875rem"}
           borderRadius={"0.5rem 0.5rem 0  0"}
           border="1px"
           borderColor="grays.300"
           padding={"1rem"}
+          //bg="grays.900"
         >
           Навчальний план
         </Heading>
@@ -81,7 +82,7 @@ export default function CursePage() {
           data.program.map((mainCur) => {
             return (
               <Box
-                bg="white"
+                //bg="grays.900"
                 key={mainCur.id}
                 border="1px"
                 borderTop={"0"}
@@ -97,9 +98,9 @@ export default function CursePage() {
                       <AccordionButton>
                         <Box
                           display={"block"}
-                          color="white.400"
+                          color="white"
                           fontWeight={700}
-                          backgroundColor="gray.300"
+                          backgroundColor="primary.100"
                           height="40px"
                           width="40px"
                           lineHeight="40px"
@@ -124,14 +125,14 @@ export default function CursePage() {
                                 (compete) =>
                                   compete.completeProgramId === cursePage.id
                               )
-                            ).length / mainCur?.coursesPages.length * 100)}
+                            ).length / mainCur?.coursesPages.length * 100)}%
                         </Box>
                         <Heading
                           as="h4"
                           flex="1"
                           textAlign="left"
                           fontSize={"16px"}
-                          color="grays.800"
+                          
                         >
                           {mainCur.name}
                         </Heading>
@@ -161,7 +162,7 @@ export default function CursePage() {
                                   competesId?.find(
                                     (ids) => ids.programId === page.id
                                   )?.completeProgramId
-                                    ? "green"
+                                    ? "green.500"
                                     : "gray.100"
                                 }
                                 fontWeight="900"
@@ -193,7 +194,7 @@ export default function CursePage() {
               </Box>
             );
           })}
-      </Container>
+     
     </Layout>
   );
 }
