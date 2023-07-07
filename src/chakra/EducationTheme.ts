@@ -5,6 +5,8 @@ import { ItemTheme } from "./Item";
 import { ButtonTheme } from "./Button";
 import { LinkTheme } from "./Link";
 import { HeadingCustom } from "./Heading";
+import { CardTheme } from "./Card";
+import { MenuTheme } from "./Menu";
 
 const color = {
   blue: {
@@ -17,7 +19,7 @@ const color = {
     400: "#a1a1a8",
     500: "#9a9ea4",
     800: "#24292d",
-    900: "#2a2c31"
+    900: "#2a2c31",
   },
   reds: {
     100: "#d6293e",
@@ -32,12 +34,12 @@ const color = {
     200: "#222529",
     300: "#191b1d",
     400: "#0b0a12",
+    500: "rgba(255, 255, 255, 0.07)",
   },
-  primary:{
+  primary: {
     100: "#8e85e6",
     200: "rgba(142, 133, 230, 0.1)",
-  }
-
+  },
 };
 
 const typographyObj = {
@@ -59,7 +61,7 @@ const defaults = {
         maxWidth: "100%",
         overflowX: "hidden",
         backgroundColor: "darks.200", // Add the desired background color
-        marginBottom:'3rem',
+        marginBottom: "3rem",
       },
     },
   },
@@ -70,6 +72,8 @@ const componentsObj = {
   Link: LinkTheme,
   Button: ButtonTheme,
   Heading: HeadingCustom,
+  Card: CardTheme,
+  Menu: MenuTheme,
 };
 
 const colors = { ...color };

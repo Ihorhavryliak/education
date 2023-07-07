@@ -17,7 +17,7 @@ export const metadata = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
+
   return (
       <main className={roboto.className}>
         <Header />

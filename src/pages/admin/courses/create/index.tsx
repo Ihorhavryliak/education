@@ -4,6 +4,7 @@ import {
   FormControl,
   Button,
   Container,
+  Box,
 } from "@chakra-ui/react";
 import { api } from "~/utils/api";
 import { type FormEvent, useState } from "react";
@@ -41,17 +42,17 @@ export default function CreateCurse() {
     <Layout>
       <Container>
         <form onSubmit={onSubmit}>
-          <FormControl>
+          <FormControl mt='8px'>
             <FormLabel htmlFor="name">First name</FormLabel>
             <InputType value={name} onChange={setName} placeholder="name" />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl mt='8px'>
             <FormLabel htmlFor="video">video</FormLabel>
             <InputType value={video} onChange={setVideo} placeholder="video" />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl>
+          <FormControl mt='8px'>
             <FormLabel htmlFor="descriptionCurse">descriptionCurse</FormLabel>
             <InputType
               value={description}
@@ -60,18 +61,20 @@ export default function CreateCurse() {
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="shortName">Short Name</FormLabel>
+          <FormControl mt='8px'>
+            <FormLabel htmlFor="shortName">Image</FormLabel>
             <InputType
               value={shortName}
               onChange={setShortName}
-              placeholder="Short Name"
+              placeholder="Image"
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
+          <Box textAlign={'right'}>
           <Button mt={4} colorScheme="teal" type="submit">
-            Submit
+            Сторити
           </Button>
+          </Box>
         </form>
       </Container>
     </Layout>

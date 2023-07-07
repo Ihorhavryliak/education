@@ -1,4 +1,3 @@
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Accordion,
   AccordionButton,
@@ -20,6 +19,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import React, { useEffect, useMemo, useState } from "react";
+import ArrowBack from "~/components/ArrowBack/ArrowBack";
 import CompleteIcon from "~/components/CompleteIcon/CompleteIcon";
 import InputType from "~/components/InputType/InputType";
 import { Layout } from "~/components/Layout";
@@ -164,12 +164,14 @@ export default function Curse() {
             mb="1.5rem"
           >
             <Heading as="h1" mb="1.5rem">
-         <Box as='span' cursor={'pointer'} onClick={()=>router.back()}>   <ArrowBackIcon  />  </Box>
-            {data.name}
+              <ArrowBack />
+              <Box ms="8px" as="span">
+                {data.name}
+              </Box>
             </Heading>
             <Box>
               <CompleteIcon
-                color="green.500"
+                color="primary.100"
                 data={competesId?.completeProgramId}
                 size={10}
               />
@@ -178,7 +180,7 @@ export default function Curse() {
           {data.video && (
             <Box maxHeight={"600px"} height="100%">
               <iframe
-              allowFullScreen={true}
+                allowFullScreen={true}
                 width="100%"
                 height="360"
                 src={`https://www.youtube.com/embed/${data.video}`}
@@ -241,11 +243,11 @@ export default function Curse() {
                             ></iframe>
                           )}
                         </Box>
-                        <Box mt='0.5rem' >
-                        {task.description}
-                        </Box>
+                        <Box mt="0.5rem">{task.description}</Box>
 
-                        <Text mt={'1rem'} mb={"0.5rem"}>Моє рішення завдання</Text>
+                        <Text mt={"1rem"} mb={"0.5rem"}>
+                          Моє рішення завдання
+                        </Text>
                         <Box bg="primary.200" p="1rem">
                           {task.solution}
                           <Box
@@ -259,19 +261,20 @@ export default function Curse() {
                         </Box>
                         {!task.solution ||
                           (edit === task.id && (
-                            <Box mt='0.5rem'>
-                            <InputType
-                              height={"250px"}
-                              size="lg"
-                              type="textarea"
-                              onChange={(e) =>
-                                handleSolutionOnChange(e, task.id)
-                              }
-                              value={
-                                solution.find((sol) => sol.id === task.id)
-                                  ?.value as string
-                              }
-                            /></Box>
+                            <Box mt="0.5rem">
+                              <InputType
+                                height={"250px"}
+                                size="lg"
+                                type="textarea"
+                                onChange={(e) =>
+                                  handleSolutionOnChange(e, task.id)
+                                }
+                                value={
+                                  solution.find((sol) => sol.id === task.id)
+                                    ?.value as string
+                                }
+                              />
+                            </Box>
                           ))}
                         <Box textAlign={"right"}>
                           <Button
@@ -299,7 +302,9 @@ export default function Curse() {
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                               ></iframe>
                             )}
-                            <Box mt='0.5rem' bg="primary.200" p="1rem">{task?.lessonSolution}</Box>
+                            <Box mt="0.5rem" bg="primary.200" p="1rem">
+                              {task?.lessonSolution}
+                            </Box>
                           </AccordionPanel>
                         </AccordionItem>
                       </AccordionPanel>
@@ -340,8 +345,10 @@ export default function Curse() {
                       </AccordionButton>
                     </h2>
                     <AccordionPanel pb={4}>
-                      <Box bg={'primary.200'} p='1rem'>
-                      {question.answer} </Box></AccordionPanel>
+                      <Box bg={"primary.200"} p="1rem">
+                        {question.answer}{" "}
+                      </Box>
+                    </AccordionPanel>
                   </AccordionItem>
                 );
               })}

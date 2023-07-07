@@ -1,4 +1,8 @@
-import { CheckCircleIcon, ExternalLinkIcon } from "@chakra-ui/icons";
+import {
+  ArrowForwardIcon,
+  CheckCircleIcon,
+  ExternalLinkIcon,
+} from "@chakra-ui/icons";
 import { Link } from "@chakra-ui/next-js";
 import {
   Accordion,
@@ -11,11 +15,14 @@ import {
   Container,
   Flex,
   Heading,
+  Text,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import React from "react";
+import ArrowBack from "~/components/ArrowBack/ArrowBack";
+import CircularProgress from "~/components/CircularProgress/CircularProgress";
 import { Layout } from "~/components/Layout";
 import { api } from "~/utils/api";
 
@@ -60,16 +67,16 @@ export default function CursePage() {
   };
 
   return (
-    <Layout>
-    
+    <>
+      <Layout>
         <Heading as="h2" mb="1.5rem">
-          {data && data.mainProgram?.name}
+          <ArrowBack /> {data && data.mainProgram?.name}
         </Heading>
-        <Heading
 
+        <Heading
           as="h3"
           fontSize={"1.875rem"}
-          borderRadius={"0.5rem 0.5rem 0  0"}
+          borderRadius={"0.5rem"}
           border="1px"
           borderColor="grays.300"
           padding={"1rem"}
@@ -77,80 +84,94 @@ export default function CursePage() {
         >
           Навчальний план
         </Heading>
-
-        {data &&
-          data.program.map((mainCur) => {
-            return (
-              <Box
-                //bg="grays.900"
-                key={mainCur.id}
-                border="1px"
-                borderTop={"0"}
-                padding={"1rem"}
-                borderColor="grays.300"
-              >
+      </Layout>
+      {data &&
+        data.program.map((mainCur) => {
+          return (
+            <Container
+              _before={{
+                content: "''",
+                position: "absolute",
+                width: "2px",
+                height: "3rem",
+                backgroundColor: "darks.300",
+                zIndex: "0",
+                marginTop: "-4.6rem",
+                marginLeft: "2.5rem",
+              }}
+              key={mainCur.id}
+              mt={"3rem"}
+            >
+              <Box>
                 {/*   <Heading as="h4" fontSize={"1.3125rem"} mb="1.6rem ">
                 {cur.curse.name}
               </Heading> */}
                 <Accordion defaultIndex={[0]} allowMultiple>
-                  <AccordionItem>
+                  <AccordionItem border={0}>
                     <h2>
-                      <AccordionButton>
-                        <Box
-                          display={"block"}
-                          color="white"
-                          fontWeight={700}
-                          backgroundColor="primary.100"
-                          height="40px"
-                          width="40px"
-                          lineHeight="40px"
-                          borderRadius="50%"
-                          textAlign="center"
-                          fontSize={"13px"}
-                          mr="1rem"
-                          _hover={{
-                            color: "white",
-                            backgroundColor: "reds.100",
-                            borderColor: "reds.100",
-                            transition: "all ease-out 0.2s",
-                          }}
-                        >
-                          {/* <ArrowForwardIcon
-                                    fontWeight="900"
-                                    fontSize={"20px"}
-                                  /> */}
-                          {mainCur &&
-                            Math.round(mainCur?.coursesPages?.filter((cursePage) =>
-                              competesId?.some(
-                                (compete) =>
-                                  compete.completeProgramId === cursePage.id
+                      <AccordionButton my="1rem" _hover={{ bg: "none" }}>
+                        <Text mr={"1rem"}>
+                          <CircularProgress
+                            size={50}
+                            strokeWidth={2}
+                            percentage={
+                              mainCur &&
+                              Math.round(
+                                (mainCur?.coursesPages?.filter((cursePage) =>
+                                  competesId?.some(
+                                    (compete) =>
+                                      compete.completeProgramId === cursePage.id
+                                  )
+                                ).length /
+                                  mainCur?.coursesPages.length) *
+                                  100
                               )
-                            ).length / mainCur?.coursesPages.length * 100)}%
-                        </Box>
+                            }
+                            color={
+                              mainCur &&
+                              Math.round(
+                                (mainCur?.coursesPages?.filter((cursePage) =>
+                                  competesId?.some(
+                                    (compete) =>
+                                      compete.completeProgramId === cursePage.id
+                                  )
+                                ).length /
+                                  mainCur?.coursesPages.length) *
+                                  100
+                              ) === 100
+                                ? "#8e85e6"
+                                : "#f7c32e"
+                            }
+                          />
+                        </Text>
                         <Heading
                           as="h4"
                           flex="1"
                           textAlign="left"
                           fontSize={"16px"}
-                          
                         >
                           {mainCur.name}
                         </Heading>
                         <AccordionIcon />
                       </AccordionButton>
+                      {/* <Text> {mainCur.description}</Text> */}
                     </h2>
 
-                    {mainCur.coursesPages.map((page) => {
+                    {mainCur.coursesPages.map((page, index) => {
                       return (
                         <AccordionPanel
                           key={page.id}
                           py={"15px"}
-                          borderTop="1px"
-                          borderColor="gray.100"
+                          ps="26px"
+                          borderTop={index === 0 ? "1px" : 0}
+                          borderBottom="1px"
+                          borderColor="darks.200"
                           _hover={{
-                            background: "blue.100",
+                            background: "primary.200",
                             transition: "all ease-out 0.2s",
                           }}
+                          onClick={() => handleToPage(page.id)}
+                          cursor={"pointer"}
                         >
                           <Flex
                             alignItems={"center"}
@@ -162,7 +183,7 @@ export default function CursePage() {
                                   competesId?.find(
                                     (ids) => ids.programId === page.id
                                   )?.completeProgramId
-                                    ? "green.500"
+                                    ? "primary.100"
                                     : "gray.100"
                                 }
                                 fontWeight="900"
@@ -178,13 +199,13 @@ export default function CursePage() {
                               </Heading>
                             </Flex>
 
-                            <Button
-                              onClick={() => handleToPage(page.id)}
+                            {/* <Button
+                              
                               color="blue.500"
                               fontSize="1.2125rem"
-                            >
-                              <ExternalLinkIcon />
-                            </Button>
+                            > */}
+                            <ArrowForwardIcon boxSize={6} />
+                            {/*    </Button> */}
                           </Flex>
                         </AccordionPanel>
                       );
@@ -192,9 +213,9 @@ export default function CursePage() {
                   </AccordionItem>
                 </Accordion>
               </Box>
-            );
-          })}
-     
-    </Layout>
+            </Container>
+          );
+        })}
+    </>
   );
 }
