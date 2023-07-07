@@ -50,8 +50,14 @@ const main = defineStyle({
   _focus: {},
   _hover: {
     color: "white",
-    bg: "primary.100",
+    bg: "primary.200 !important",
   },
+  _disabled:{
+    color: "white",
+    bg: "primary.200",
+  }
+
+
 });
 export const ButtonTheme = defineStyleConfig({
   variants: { menu, main },

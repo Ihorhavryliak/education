@@ -15,11 +15,10 @@ import { signIn, signOut, useSession } from "next-auth/react";
 export default function Header() {
   const { data: sessionData } = useSession();
   return (
-    <Container borderRadius={"0"} mt={"1rem"} w={"100%"} maxWidth="100%" >
-      <Flex justifyContent={"space-between"} alignItems={"center"} >
+    <Container borderRadius={"0"} mt={"1rem"} w={"100%"} maxWidth="100%"  >
+      <Flex justifyContent={"space-between"} alignItems={"center"} h={'40px'} >
         <Box>
           <Link href="/">
-            {" "}
             <Image width={120} height={30} alt="logo" src={"/logo.svg"} />
           </Link>
         </Box>
@@ -31,7 +30,7 @@ export default function Header() {
                 as={Button}
                 variant={"menu"} 
               >
-                <Flex alignItems={'center'} gap='8px'>
+                <Flex alignItems={'center'} gap='8px' >
                   {sessionData.user.image && (
                     <Image
                       width={30}

@@ -10,7 +10,7 @@ import mainImage from "../assets/Image/main.png";
 import Image from "next/image";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 const Home: NextPage = () => {
-  const { data: session } = useSession();
+  const { data: session,  } = useSession();
 
   //const hello = api.example.hello.useQuery({ text: "from tRPC" });
 

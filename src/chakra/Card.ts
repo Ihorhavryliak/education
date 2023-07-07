@@ -9,7 +9,7 @@ const baseStyle = definePartsStyle({
   // define the part you're going to style
   container: {
     backgroundColor: "darks.300",
-
+    maxW: '368px'
   },
   header: {
     p: "2px",

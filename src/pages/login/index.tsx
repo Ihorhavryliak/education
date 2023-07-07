@@ -1,16 +1,19 @@
-import { Button, Flex, Heading } from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import { Button, Heading } from "@chakra-ui/react";
 import { type GetServerSideProps } from "next";
 import { getProviders, signIn } from "next-auth/react";
 import { type AppProps } from "next/app";
+import { useRouter } from "next/navigation";
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
 
 import { Layout } from "~/components/Layout";
 
 const Login = ({ providers }: { providers: AppProps }) => {
+  const router = useRouter();
   return (
     <Layout>
-      <Heading as="h1" mb='2rem'>
-        <ArrowBack /> Увійти
+      <Heading as="h1" mb='2rem' >
+      <ArrowBackIcon onClick={()=>router.push("/")} cursor={'pointer'} />Увійти
       </Heading>
 
       {Object.values(providers).map((provider) => (

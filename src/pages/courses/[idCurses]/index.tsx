@@ -20,11 +20,13 @@ import {
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
 import CircularProgress from "~/components/CircularProgress/CircularProgress";
 import { Layout } from "~/components/Layout";
 import { api } from "~/utils/api";
+import Router from "next/router";
+import Loader from "~/components/Loader/Loader";
 
 export default function CursePage() {
   const router = useRouter();
@@ -46,15 +48,16 @@ export default function CursePage() {
     },
   });
 
-  const { data } = api.program.all.useQuery({
+  const { data, isLoading: isLoadingProgram } = api.program.all.useQuery({
     id: router.query.idCurses ? (router.query.idCurses as string) : "",
   });
-  const { data: competesId } = api.complete.findAllByUserId.useQuery(
-    {
-      userId: userId,
-    },
-    { enabled: userId ? true : false }
-  );
+  const { data: competesId, isLoading: isLoadingComplete } =
+    api.complete.findAllByUserId.useQuery(
+      {
+        userId: userId,
+      },
+      { enabled: userId ? true : false }
+    );
 
   const handleToPage = async (pageId: number) => {
     const isInCompetes = competesId?.find((ids) => ids.programId === pageId);
@@ -66,24 +69,40 @@ export default function CursePage() {
     }
   };
 
+  useEffect(() => {
+    if (!(session.status === 'loading') && !session?.data) {
+      void router.push("/login");
+    }
+  }, []);
+
   return (
     <>
       <Layout>
-        <Heading as="h2" mb="1.5rem">
-          <ArrowBack /> {data && data.mainProgram?.name}
-        </Heading>
+        {isLoading || isLoadingProgram || isLoadingComplete ? (
+          <Loader />
+        ) : (
+          <>
+            {session?.data && (
+              <>
+                <Heading as="h2" mb="1.5rem">
+                  <ArrowBack /> {data && data.mainProgram?.name}
+                </Heading>
 
-        <Heading
-          as="h3"
-          fontSize={"1.875rem"}
-          borderRadius={"0.5rem"}
-          border="1px"
-          borderColor="grays.300"
-          padding={"1rem"}
-          //bg="grays.900"
-        >
-          Навчальний план
-        </Heading>
+                <Heading
+                  as="h3"
+                  fontSize={"1.875rem"}
+                  borderRadius={"0.5rem"}
+                  border="1px"
+                  borderColor="grays.300"
+                  padding={"1rem"}
+                  //bg="grays.900"
+                >
+                  Навчальний план
+                </Heading>
+              </>
+            )}
+          </>
+        )}
       </Layout>
       {data &&
         data.program.map((mainCur) => {
@@ -154,7 +173,6 @@ export default function CursePage() {
                         </Heading>
                         <AccordionIcon />
                       </AccordionButton>
-                      {/* <Text> {mainCur.description}</Text> */}
                     </h2>
 
                     {mainCur.coursesPages.map((page, index) => {
