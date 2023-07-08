@@ -104,6 +104,7 @@ export default function CreateCurse() {
     } else {
       setQuestionName("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpenId]);
 
   useMemo(() => {
@@ -128,6 +129,7 @@ export default function CreateCurse() {
     } else {
       setTaskDescription("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpenTaskId]);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -141,7 +143,7 @@ export default function CreateCurse() {
       img: shortName,
       id: curseId ? +curseId : 1,
       sort: +sort,
-      theory: theory
+      theory: theory,
     };
     mutate(data);
   };
@@ -169,29 +171,29 @@ export default function CreateCurse() {
     <Layout>
       <Container>
         <form onSubmit={onSubmit}>
-          <FormControl my='8px'>
+          <FormControl my="8px">
             <FormLabel htmlFor="name">First name</FormLabel>
             <InputType value={name} onChange={setName} placeholder="name" />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl my='8px'>
+          <FormControl my="8px">
             <FormLabel htmlFor="video">video</FormLabel>
             <InputType value={video} onChange={setVideo} placeholder="video" />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl my='8px'>
+          <FormControl my="8px">
             <FormLabel htmlFor="descriptionCurse">descriptionCurse</FormLabel>
             <InputType
-            height="200px"
-            type="textarea"
-            size="lg"
+              height="200px"
+              type="textarea"
+              size="lg"
               value={description}
               onChange={setDescription}
               placeholder="description curse"
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl my='8px'>
+          <FormControl my="8px">
             <FormLabel htmlFor="shortName">Image</FormLabel>
             <InputType
               value={shortName}
@@ -200,24 +202,24 @@ export default function CreateCurse() {
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl my='8px'>
+          <FormControl my="8px">
             <FormLabel htmlFor="sort">Sort</FormLabel>
             <InputType value={sort} onChange={setSort} placeholder="sort" />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl my='8px'>
+          <FormControl my="8px">
             <FormLabel htmlFor="sort">Theory</FormLabel>
             <InputType
-                height="200px"
-                type="textarea"
-                size="lg"
+              height="200px"
+              type="textarea"
+              size="lg"
               value={theory}
               onChange={setTheory}
               placeholder="theory"
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl my='8px'>
+          <FormControl my="8px">
             <FormLabel htmlFor="sort">url</FormLabel>
             <InputType value={url} onChange={setUrl} placeholder="url" />
             <FormErrorMessage></FormErrorMessage>
@@ -228,7 +230,7 @@ export default function CreateCurse() {
           </Button>
         </form>
 
-        <Text mt="2rem" mb="8px" my='8px'>
+        <Text mt="2rem" mb="8px" my="8px">
           Question
         </Text>
         <QuestionList
@@ -243,7 +245,7 @@ export default function CreateCurse() {
           setQuestionSort={setQuestionSort}
           onSubmitQuestion={onSubmitQuestion}
         />
-        <Text mt="2rem" mb="8px" my='8px'>
+        <Text mt="2rem" mb="8px" my="8px">
           Task
         </Text>
         <TaskList

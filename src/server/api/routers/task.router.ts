@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { CourseSchema } from "~/schema/course.schema";
 import {
   createTRPCRouter,
   publicProcedure,
@@ -9,13 +8,15 @@ import {
 
 export const taskRouter = createTRPCRouter({
   create: protectedAdminProcedure
-    .input(  z.object({
-      name: z.string(),
-      sort: z.number(),
-      description: z.string(),
-      video: z.string(),
-      curseId: z.number()
-    }))
+    .input(
+      z.object({
+        name: z.string(),
+        sort: z.number(),
+        description: z.string(),
+        video: z.string(),
+        curseId: z.number(),
+      })
+    )
     .mutation(({ ctx, input }) => {
       return ctx.prisma.task.create({
         data: {
@@ -51,7 +52,7 @@ export const taskRouter = createTRPCRouter({
         },
       });
     }),
-    updateSolution: protectedProcedure
+  updateSolution: protectedProcedure
     .input(
       z.object({
         id: z.number(),

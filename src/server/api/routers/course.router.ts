@@ -64,7 +64,7 @@ export const courseRouter = createTRPCRouter({
         },
       });
     }),
-  getQuestion: protectedAdminProcedure.query(async ({ ctx, input }) => {
+  getQuestion: protectedAdminProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.question.findMany();
   }),
 });

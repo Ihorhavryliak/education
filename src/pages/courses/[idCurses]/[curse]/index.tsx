@@ -162,12 +162,14 @@ export default function Curse() {
         console.error("Error occurred during data fetching:", error);
       }
     })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoadingTask]);
 
   useEffect(() => {
     if (!(session.status === "loading") && !session?.data) {
       void router.push("/login");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   return (
