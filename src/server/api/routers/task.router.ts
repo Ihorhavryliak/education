@@ -51,7 +51,7 @@ export const taskRouter = createTRPCRouter({
         },
       });
     }),
-    updateSolution: protectedAdminProcedure
+    updateSolution: protectedProcedure
     .input(
       z.object({
         id: z.number(),

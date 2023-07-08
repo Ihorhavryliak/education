@@ -1,5 +1,7 @@
 import { Button, Container, Select, Text } from "@chakra-ui/react";
-import React, { type FormEvent, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import React, { type FormEvent, useState, useEffect } from "react";
 import InputType from "~/components/InputType/InputType";
 import { Layout } from "~/components/Layout";
 import { api } from "~/utils/api";
@@ -32,53 +34,69 @@ export default function TaskCreate() {
     };
     mutate(data);
   };
-  return (
-    <Layout>
-      <Container>
-        <form onSubmit={onSubmit}>
-          <Text my="8px">name:</Text>
-          <InputType
-            placeholder="name"
-            value={taskName}
-            onChange={setTaskName}
-          />
-          <Text my="8px">Description task</Text>
-          <InputType
-            placeholder="description"
-            value={taskDescription}
-            onChange={setTaskDescription}
-          />
-          <Text my="8px">Video</Text>
-          <InputType
-            placeholder="Video"
-            value={taskVideo}
-            onChange={setTaskVideo}
-          />
 
-          <Text my="8px">Select lesson</Text>
-          <Select
-            placeholder="Select lesson"
-            onChange={(e) => setCurseId(e.target.value)}
-          >
-            {lessons?.map((lesson) => (
-              <option key={lesson.id} value={lesson.id}>
-                {lesson.name}
-              </option>
-            ))}
-          </Select>
-          <Text my="8px">Sort</Text>
-          <InputType
-            type="number"
-            placeholder="Sort"
-            value={taskSort}
-            onChange={setTaskSort}
-          />
+  const session = useSession();
+  const router = useRouter();
 
-          <Button mt={4} colorScheme="teal" type="submit">
-            Create
-          </Button>
-        </form>
-      </Container>
-    </Layout>
-  );
+  useEffect(() => {
+    if (
+      (!(session.status === "loading") && !session?.data) ||
+      session?.data?.user?.role !== 1
+    ) {
+      void router.push("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
+
+  if (session?.data?.user?.role === 1) {
+    return (
+      <Layout>
+        <Container>
+          <form onSubmit={onSubmit}>
+            <Text my="8px">name:</Text>
+            <InputType
+              placeholder="name"
+              value={taskName}
+              onChange={setTaskName}
+            />
+            <Text my="8px">Description task</Text>
+            <InputType
+              placeholder="description"
+              value={taskDescription}
+              onChange={setTaskDescription}
+            />
+            <Text my="8px">Video</Text>
+            <InputType
+              placeholder="Video"
+              value={taskVideo}
+              onChange={setTaskVideo}
+            />
+
+            <Text my="8px">Select lesson</Text>
+            <Select
+              placeholder="Select lesson"
+              onChange={(e) => setCurseId(e.target.value)}
+            >
+              {lessons?.map((lesson) => (
+                <option key={lesson.id} value={lesson.id}>
+                  {lesson.name}
+                </option>
+              ))}
+            </Select>
+            <Text my="8px">Sort</Text>
+            <InputType
+              type="number"
+              placeholder="Sort"
+              value={taskSort}
+              onChange={setTaskSort}
+            />
+
+            <Button mt={4} colorScheme="teal" type="submit">
+              Create
+            </Button>
+          </form>
+        </Container>
+      </Layout>
+    );
+  }
 }

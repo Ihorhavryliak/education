@@ -1,22 +1,12 @@
 import {
-  FormErrorMessage,
-  FormLabel,
-  FormControl,
-  Input,
   Button,
   Container,
-  HStack,
-  TagLabel,
-  TagCloseButton,
-  Tag,
   Text,
   Select as ChakraSelect,
 } from "@chakra-ui/react";
 import { api } from "~/utils/api";
-import { ProgramType } from "~/schema/program.schema";
-import { MultiValue, Select } from "chakra-react-select";
-import { ChangeEvent, FormEvent, useEffect, useId, useState } from "react";
-import { Curse } from "@prisma/client";
+import { type MultiValue, Select } from "chakra-react-select";
+import { type FormEvent, useEffect, useId, useState } from "react";
 import InputType from "~/components/InputType/InputType";
 import { Layout } from "~/components/Layout";
 import { useRouter } from "next/router";

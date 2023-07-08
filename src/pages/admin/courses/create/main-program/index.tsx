@@ -5,10 +5,12 @@ import {
   Button,
   Container,
 } from "@chakra-ui/react";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useState, useEffect } from "react";
 import { Layout } from "~/components/Layout";
 import InputType from "~/components/InputType/InputType";
 import { api } from "~/utils/api";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function CreateGeneralProgram() {
   const { mutate } = api.generalProgram.create.useMutation({
@@ -34,6 +36,19 @@ export default function CreateGeneralProgram() {
     };
     mutate(data);
   };
+
+  const session = useSession();
+  const router = useRouter();
+  useEffect(() => {
+    if (
+      (!(session.status === "loading") && !session?.data) ||
+      session?.data?.user?.role !== 1
+    ) {
+      void router.push("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
+  if (session?.data?.user?.role === 1) {
   return (
     <Layout>
       <Container>
@@ -73,4 +88,5 @@ export default function CreateGeneralProgram() {
       </Container>
     </Layout>
   );
+  }
 }

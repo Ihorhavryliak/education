@@ -48,7 +48,7 @@ export default function CursePage() {
     },
   });
 
-  const { data, isLoading: isLoadingProgram } = api.program.all.useQuery({
+  const { data, isLoading: isLoadingProgram} = api.program.all.useQuery({
     id: router.query.idCurses ? (router.query.idCurses as string) : "",
   });
   const { data: competesId, isLoading: isLoadingComplete } =
@@ -70,10 +70,10 @@ export default function CursePage() {
   };
 
   useEffect(() => {
-    if (!(session.status === 'loading') && !session?.data) {
+    if (!(session.status === 'loading') && !session?.data )  {
       void router.push("/login");
     }
-  }, []);
+  }, [session]);
 
   return (
     <>

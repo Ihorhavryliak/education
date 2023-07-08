@@ -6,7 +6,7 @@ import {
   Container,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { type FormEvent, useState, useCallback, useEffect } from "react";
+import { type FormEvent, useState, useEffect } from "react";
 import { Layout } from "~/components/Layout";
 import InputType from "~/components/InputType/InputType";
 import { api } from "~/utils/api";
@@ -28,7 +28,6 @@ export default function CreateGeneralProgram() {
     },
     { enabled: mainProgramId ? true : false }
   );
-
 
   //chose namesx
   const [name, setName] = useState("");
@@ -64,41 +63,41 @@ export default function CreateGeneralProgram() {
   };
   return (
     <Layout>
-    <Container>
-      <form onSubmit={handleSend}>
-        <FormControl>
-          <FormLabel htmlFor="name">Title Program</FormLabel>
-          <InputType
-            placeholder="Title Program"
-            value={name}
-            onChange={setName}
-          />
-          Q <FormErrorMessage></FormErrorMessage>
-        </FormControl>
-        <FormControl>
-          <FormLabel htmlFor="description">Description Program</FormLabel>
+      <Container>
+        <form onSubmit={handleSend}>
+          <FormControl>
+            <FormLabel htmlFor="name">Title Program</FormLabel>
+            <InputType
+              placeholder="Title Program"
+              value={name}
+              onChange={setName}
+            />
+            Q <FormErrorMessage></FormErrorMessage>
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="description">Description Program</FormLabel>
 
-          <InputType
-            placeholder="description"
-            value={description}
-            onChange={setDescription}
-          />
-          <FormErrorMessage></FormErrorMessage>
-        </FormControl>
-        <FormControl>
-          <FormLabel htmlFor="shortName">Short Name</FormLabel>
-          <InputType
-            placeholder="Short Name"
-            value={shortName}
-            onChange={setShortName}
-          />
-          <FormErrorMessage></FormErrorMessage>
-        </FormControl>
-        <Button mt={4} colorScheme="teal" type="submit">
-          Edit
-        </Button>
-      </form>
-    </Container>
+            <InputType
+              placeholder="description"
+              value={description}
+              onChange={setDescription}
+            />
+            <FormErrorMessage></FormErrorMessage>
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="shortName">Short Name</FormLabel>
+            <InputType
+              placeholder="Short Name"
+              value={shortName}
+              onChange={setShortName}
+            />
+            <FormErrorMessage></FormErrorMessage>
+          </FormControl>
+          <Button mt={4} colorScheme="teal" type="submit">
+            Edit
+          </Button>
+        </form>
+      </Container>
     </Layout>
   );
 }

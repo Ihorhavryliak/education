@@ -1,5 +1,7 @@
 import { Button, Container, Select, Text } from "@chakra-ui/react";
-import React, { type FormEvent, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import React, { type FormEvent, useState, useEffect } from "react";
 import InputType from "~/components/InputType/InputType";
 import { Layout } from "~/components/Layout";
 import { api } from "~/utils/api";
@@ -33,9 +35,22 @@ export default function QuestionCreate() {
     setQuestionSort("");
     setCurseId("");
   };
-  return (
-    <Layout>
-    
+
+  const session = useSession();
+  const router = useRouter();
+  useEffect(() => {
+    if (
+      (!(session.status === "loading") && !session?.data) ||
+      session?.data?.user?.role !== 1
+    ) {
+      void router.push("/");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session]);
+
+  if (session?.data?.user?.role === 1) {
+    return (
+      <Layout>
         <form onSubmit={onSubmit}>
           <Text my="8px">name:</Text>
           <InputType
@@ -75,7 +90,7 @@ export default function QuestionCreate() {
             Create
           </Button>
         </form>
- 
-    </Layout>
-  );
+      </Layout>
+    );
+  }
 }

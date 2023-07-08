@@ -9,14 +9,13 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 
-
 import { Image, Link } from "@chakra-ui/next-js";
 import { signIn, signOut, useSession } from "next-auth/react";
 export default function Header() {
   const { data: sessionData } = useSession();
   return (
-    <Container borderRadius={"0"} mt={"1rem"} w={"100%"} maxWidth="100%"  >
-      <Flex justifyContent={"space-between"} alignItems={"center"} h={'40px'} >
+    <Container borderRadius={"0"} mt={"1rem"} w={"100%"} maxWidth="100%">
+      <Flex justifyContent={"space-between"} alignItems={"center"} h={"40px"}>
         <Box>
           <Link href="/">
             <Image width={120} height={30} alt="logo" src={"/logo.svg"} />
@@ -26,11 +25,11 @@ export default function Header() {
           {sessionData ? (
             <Menu>
               <MenuButton
-              _hover= {{ color: "primary.100" }}
+                _hover={{ color: "primary.100" }}
                 as={Button}
-                variant={"menu"} 
+                variant={"menu"}
               >
-                <Flex alignItems={'center'} gap='8px' >
+                <Flex alignItems={"center"} gap="8px">
                   {sessionData.user.image && (
                     <Image
                       width={30}
@@ -55,26 +54,12 @@ export default function Header() {
               </MenuList>
             </Menu>
           ) : (
-            <Link _hover={{ color: "primary.100" }} href={"login"}>Увійти</Link>
+            <Link _hover={{ color: "primary.100" }} href={"login"}>
+              Увійти
+            </Link>
           )}
         </Box>
       </Flex>
     </Container>
-  );
-}
-
-function AuthShowcase() {
-  const { data: sessionData } = useSession();
-
-  return (
-    <div>
-      {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
-
-      <button
-        onClick={sessionData ? () => void signOut() : () => void signIn()}
-      >
-        {sessionData ? "Sign out" : "Sign in"}
-      </button>
-    </div>
   );
 }

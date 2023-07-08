@@ -6,19 +6,16 @@ import {
   AccordionPanel,
   Box,
   Button,
-  Container,
   Flex,
   Heading,
-  Input,
   Text,
 } from "@chakra-ui/react";
 
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 
 import { useRouter } from "next/router";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
 import CompleteIcon from "~/components/CompleteIcon/CompleteIcon";
 import InputType from "~/components/InputType/InputType";
@@ -81,7 +78,8 @@ export default function Curse() {
       },
       { enabled: data?.id && userId ? true : false }
     );
-  const [numberLoading, setNumberLoading] = useState(0)
+  const [numberLoading, setNumberLoading] = useState(0);
+  console.log(numberLoading, "numberLoading");
   const [solution, setSolution] = useState([{ id: 0, value: "" }]);
   const handleSolutionOnChange = (val: string, id: number) => {
     if (solution.some((sol) => sol.id === id)) {
@@ -100,7 +98,7 @@ export default function Curse() {
     }
   };
   const handleCompleteTheory = (theoryId: number) => {
-    setNumberLoading(1)
+    setNumberLoading(1);
     if (competesId?.questionId && competesId?.taskId) {
       mutate({ completeId: competesId?.id, theoryId });
       mutate({
@@ -113,7 +111,7 @@ export default function Curse() {
   };
 
   const handleCompleteTask = (taskId: number) => {
-    setNumberLoading(2)
+    setNumberLoading(2);
     if (competesId?.theoryId && competesId?.questionId) {
       mutate({ completeId: competesId?.id, taskId });
       mutate({
@@ -126,7 +124,7 @@ export default function Curse() {
   };
 
   const handleCompleteQuestion = (questionId: number) => {
-    setNumberLoading(3)
+    setNumberLoading(3);
     if (competesId?.taskId && competesId?.theoryId) {
       mutate({ completeId: competesId?.id, questionId });
       mutate({
@@ -148,6 +146,7 @@ export default function Curse() {
   }, [data]);
 
   const handleSolution = (taskId: number) => {
+    setNumberLoading(4);
     const solutionValue = solution.find((sol) => sol.id === taskId);
     taskMutate({ id: taskId, solution: solutionValue?.value as string });
     setEdit(0);
@@ -156,34 +155,32 @@ export default function Curse() {
   useEffect(() => {
     void (async () => {
       try {
-        await refetch();
+        if (router.query.curse) {
+          await refetch();
+        }
       } catch (error) {
         console.error("Error occurred during data fetching:", error);
       }
     })();
   }, [isLoadingTask]);
 
-  
   useEffect(() => {
-    if (!(session.status === 'loading') && !session?.data) {
+    if (!(session.status === "loading") && !session?.data) {
       void router.push("/login");
     }
-  }, []);
-  
+  }, [session]);
+
   return (
     <Layout>
-      {isLoadingTask || isLoadingCourse || isLoadingComplete ? (
+      {(isLoadingTask || isLoadingCourse || isLoadingComplete) &&
+      numberLoading === 0 ? (
         <Loader />
       ) : (
         <>
           {data && (
             <Box>
-              <Flex
-                justifyContent={"space-between"}
-                alignItems={"center"}
-                mb="1.5rem"
-              >
-                <Heading as="h1" mb="1.5rem">
+              <Flex justifyContent={"space-between"} alignItems={"center"}>
+                <Heading as="h1">
                   <ArrowBack />
                   <Box ms="8px" as="span">
                     {data.name}
@@ -198,7 +195,7 @@ export default function Curse() {
                 </Box>
               </Flex>
               {data.video && (
-                <Box maxHeight={"600px"} height="100%">
+                <Box mt="3rem" maxHeight={"600px"} height="100%">
                   <iframe
                     allowFullScreen={true}
                     width="100%"
@@ -209,39 +206,31 @@ export default function Curse() {
               )}
               <Box mt="2rem">
                 <Flex justifyContent={"space-between"} alignItems={"center"}>
-                  <Heading as="h5" mb="1rem">
-                    Теорія
-                  </Heading>
-                  <Box>
-                    <CompleteIcon data={competesId?.theoryId} />
-                  </Box>
+                  <Heading as="h5">Теорія</Heading>
                 </Flex>
                 <Box
+                  mt="1rem"
                   dangerouslySetInnerHTML={{ __html: data.theory as string }}
                 />
                 <Box textAlign={"right"}>
                   <Button
                     mt="1rem"
-                    variant={"main"}
+                    variant={"load"}
                     onClick={() => handleCompleteTheory(data?.id)}
                     isLoading={isLoading && numberLoading === 1}
                     isDisabled={competesId?.theoryId ? true : false}
+                    leftIcon={<CompleteIcon data={competesId?.theoryId} />}
                   >
                     З теорією ознайомився
                   </Button>
                 </Box>
               </Box>
 
-              <Box mt="1.5rem">
+              <Box mt="2rem">
                 <Flex justifyContent={"space-between"} alignItems={"center"}>
-                  <Heading as="h5" mb="1rem">
-                    Завдання
-                  </Heading>
-                  <Box>
-                    <CompleteIcon data={competesId?.taskId} />
-                  </Box>
+                  <Heading as="h5">Завдання</Heading>
                 </Flex>
-                <Accordion defaultIndex={[]} allowMultiple>
+                <Accordion mt="1rem" defaultIndex={[]} allowMultiple>
                   {data?.task &&
                     data.task.map((task) => {
                       return (
@@ -300,11 +289,16 @@ export default function Curse() {
                                   />
                                 </Box>
                               ))}
-                            <Box textAlign={"right"}>
+                            <Box textAlign={"right"} mt="1rem">
                               <Button
-                              isDisabled={competesId?.taskId ? true : false}
+                                isLoading={
+                                  (isLoadingTask ||
+                                    isLoadingCourse ||
+                                    isLoadingComplete) &&
+                                  numberLoading === 4
+                                }
                                 my="1rem"
-                                variant={"main"}
+                                variant={"load"}
                                 onClick={() => handleSolution(task.id)}
                               >
                                 Зберегти
@@ -337,29 +331,27 @@ export default function Curse() {
                       );
                     })}
                 </Accordion>
-                <Box textAlign={"right"}>
+                <Box textAlign={"right"} mt="1rem">
                   <Button
-                  isDisabled={competesId?.taskId ? true : false}
+                    isDisabled={competesId?.taskId ? true : false}
                     mt="1rem"
-                    variant={"main"}
+                    variant={"load"}
                     onClick={() =>
                       handleCompleteTask(data?.task[0]?.id as number)
                     }
                     isLoading={isLoading && numberLoading === 2}
+                    leftIcon={<CompleteIcon data={competesId?.taskId} />}
                   >
                     Виконано
                   </Button>
                 </Box>
               </Box>
 
-              <Box mt="1.5rem">
+              <Box mt="2rem">
                 <Flex justifyContent={"space-between"} alignItems={"center"}>
                   <Heading as="h5" mb="1rem">
                     Питання для співбесіди
                   </Heading>
-                  <Box>
-                    <CompleteIcon data={competesId?.questionId} />
-                  </Box>
                 </Flex>
                 <Accordion defaultIndex={[]} allowMultiple>
                   {data.question.map((question) => {
@@ -382,15 +374,16 @@ export default function Curse() {
                     );
                   })}
                 </Accordion>
-                <Box textAlign={"right"}>
+                <Box textAlign={"right"} mt="1rem">
                   <Button
                     mt="1rem"
-                    variant={"main"}
+                    variant={"load"}
                     isDisabled={competesId?.questionId ? true : false}
                     onClick={() =>
                       handleCompleteQuestion(data?.question[0]?.id as number)
                     }
                     isLoading={isLoading && numberLoading === 3}
+                    leftIcon={<CompleteIcon data={competesId?.questionId} />}
                   >
                     Виконано
                   </Button>

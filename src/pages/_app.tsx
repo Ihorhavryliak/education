@@ -7,8 +7,8 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import EducationTheme from "~/chakra/EducationTheme";
-import '@fontsource/raleway/400.css'
-import '@fontsource/open-sans/700.css'
+import "@fontsource/raleway/400.css";
+import "@fontsource/open-sans/700.css";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -17,7 +17,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SessionProvider session={session}>
       <ChakraProvider theme={EducationTheme}>
-        {/* @ts-expect-error Server Component */}
         <Component {...pageProps} />
       </ChakraProvider>
     </SessionProvider>

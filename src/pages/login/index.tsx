@@ -1,17 +1,23 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { Button, Heading } from "@chakra-ui/react";
 import { type GetServerSideProps } from "next";
-import { getProviders, signIn } from "next-auth/react";
+import { getProviders, signIn, useSession } from "next-auth/react";
 import { type AppProps } from "next/app";
 import { useRouter } from "next/navigation";
-import ArrowBack from "~/components/ArrowBack/ArrowBack";
+
 
 import { Layout } from "~/components/Layout";
+import Loader from "~/components/Loader/Loader";
 
 const Login = ({ providers }: { providers: AppProps }) => {
   const router = useRouter();
+  const session = useSession();
+  
+  
+
   return (
     <Layout>
+      {session.status === "loading" ? <Loader/> :<>
       <Heading as="h1" mb='2rem' >
       <ArrowBackIcon onClick={()=>router.push("/")} cursor={'pointer'} />Увійти
       </Heading>
@@ -32,6 +38,7 @@ const Login = ({ providers }: { providers: AppProps }) => {
           Увійти через Google
         </Button>
       ))}
+      </>}
     </Layout>
   );
 };
