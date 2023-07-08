@@ -7,16 +7,16 @@ await import("./src/env.mjs");
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
-  images: {
+  /* images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
-        port: '',
-        pathname: '/a/**',
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        port: "",
+        pathname: "/a/**",
       },
     ],
-  },
+  }, */
   /**
    * If you have `experimental: { appDir: true }` set, then you must comment the below `i18n` config
    * out.
