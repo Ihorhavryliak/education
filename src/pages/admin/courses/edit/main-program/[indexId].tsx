@@ -10,6 +10,7 @@ import { type FormEvent, useState, useEffect } from "react";
 import { Layout } from "~/components/Layout";
 import InputType from "~/components/InputType/InputType";
 import { api } from "~/utils/api";
+import ArrowBack from "~/components/ArrowBack/ArrowBack";
 
 export default function CreateGeneralProgram() {
   const router = useRouter();
@@ -63,38 +64,39 @@ export default function CreateGeneralProgram() {
   };
   return (
     <Layout>
+      <ArrowBack />
       <Container>
         <form onSubmit={handleSend}>
           <FormControl>
-            <FormLabel htmlFor="name">Title Program</FormLabel>
+            <FormLabel my='1rem' htmlFor="name">Назва курсу</FormLabel>
             <InputType
-              placeholder="Title Program"
+              placeholder="Назва курсу"
               value={name}
               onChange={setName}
             />
-            Q <FormErrorMessage></FormErrorMessage>
+             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="description">Description Program</FormLabel>
+          <FormControl my='1rem' >
+            <FormLabel htmlFor="description">Опис курсу</FormLabel>
 
             <InputType
-              placeholder="description"
+              placeholder="Опис курсу"
               value={description}
               onChange={setDescription}
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="shortName">Short Name</FormLabel>
+          <FormControl my='1rem' >
+            <FormLabel htmlFor="shortName">Коротке імя курсу</FormLabel>
             <InputType
-              placeholder="Short Name"
+              placeholder="Коротке імя курсу"
               value={shortName}
               onChange={setShortName}
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <Button mt={4} colorScheme="teal" type="submit">
-            Edit
+          <Button mt={4} variant={'main'} type="submit">
+            Зберегти
           </Button>
         </form>
       </Container>

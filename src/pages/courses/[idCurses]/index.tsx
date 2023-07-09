@@ -120,13 +120,11 @@ export default function CursePage() {
                   mt={"3rem"}
                 >
                   <Box>
-                    {/*   <Heading as="h4" fontSize={"1.3125rem"} mb="1.6rem ">
-                {cur.curse.name}
-              </Heading> */}
+      
                     <Accordion defaultIndex={[0]} allowMultiple>
                       <AccordionItem border={0}>
                         <h2>
-                          <AccordionButton my="1rem" _hover={{ bg: "none" }}>
+                          <AccordionButton my="1rem" _hover={{ bg: "none" }} bg='darks.300'>
                             <Text mr={"1rem"}>
                               <CircularProgress
                                 size={50}

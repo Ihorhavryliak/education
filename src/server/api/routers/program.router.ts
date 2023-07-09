@@ -60,7 +60,11 @@ export const programRouter = createTRPCRouter({
           generalProgramId: +input.id,
         },
         include: {
-          coursesPages: true,
+          coursesPages: {
+            orderBy: {
+              sort: 'asc'
+            }
+          }
         },
         orderBy: {
           order: 'asc'

@@ -7,38 +7,57 @@ import InputType from "~/components/InputType/InputType";
 import { Layout } from "~/components/Layout";
 import { api } from "~/utils/api";
 
-export default function QuestionCreate() {
-  const { mutate } = api.question.create.useMutation({
+export default function QuestionEdit() {
+  const session = useSession();
+  const router = useRouter();
+
+  const { data: lessons } = api.course.all.useQuery();
+
+  const { data: taskData } = api.question.getById.useQuery(
+    { questionId: router.query.questionId as string },
+    { enabled: router.query.questionId ? true : false }
+  );
+console.log(taskData, 'taskData')
+  const { mutate } = api.question.update.useMutation({
     onSuccess: (err) => {
       if (!err) {
         console.log("Todo completed 🎉");
       }
     },
   });
-  const { data: lessons } = api.course.all.useQuery();
-
   const [questionName, setQuestionName] = useState("");
   const [answer, setAnswer] = useState("");
   const [questionSort, setQuestionSort] = useState("");
   const [curseId, setCurseId] = useState("");
+  useEffect(() => {
+    if (taskData?.name) {
+      setQuestionName(taskData?.name);
+    }
+    if (taskData?.answer) {
+      setAnswer(taskData?.answer);
+    }
+    if (taskData?.sort) {
+      setQuestionSort(taskData?.sort.toString());
+    }
+    if (taskData?.curseId) {
+      setCurseId(taskData?.curseId.toString());
+    }
+  }, [taskData]);
+
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.stopPropagation();
     e.preventDefault();
+
     const data = {
+      id: router.query.questionId as string,
       name: questionName,
       answer,
       sort: +questionSort,
       curseId: +curseId,
     };
     mutate(data);
-    setQuestionName("");
-    setAnswer("");
-    setQuestionSort("");
-    setCurseId("");
   };
 
-  const session = useSession();
-  const router = useRouter();
   useEffect(() => {
     if (
       (!(session.status === "loading") && !session?.data) ||
@@ -88,8 +107,8 @@ export default function QuestionCreate() {
             onChange={setQuestionSort}
           />
 
-          <Button mt={4} variant={'main'} type="submit">
-            Створити
+          <Button mt={4} variant={"main"} type="submit">
+            Зберегти
           </Button>
         </form>
       </Layout>

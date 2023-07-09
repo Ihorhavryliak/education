@@ -7,6 +7,7 @@ import { LinkTheme } from "./Link";
 import { HeadingCustom } from "./Heading";
 import { CardTheme } from "./Card";
 import { MenuTheme } from "./Menu";
+import { AccordionTheme } from "./Accordion";
 
 const color = {
   blue: {
@@ -40,6 +41,7 @@ const color = {
     100: "#8e85e6",
     200: "rgba(142, 133, 230, 0.1)",
     300: "rgba(255, 255, 255, 0.07)",
+    400: "rgb(142 133 230 / 4%)",
   },
 };
 
@@ -75,6 +77,7 @@ const componentsObj = {
   Heading: HeadingCustom,
   Card: CardTheme,
   Menu: MenuTheme,
+  Accordion: AccordionTheme,
 };
 
 const colors = { ...color };

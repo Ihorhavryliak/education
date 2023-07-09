@@ -11,6 +11,7 @@ import InputType from "~/components/InputType/InputType";
 import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import ArrowBack from "~/components/ArrowBack/ArrowBack";
 
 export default function CreateGeneralProgram() {
   const { mutate } = api.generalProgram.create.useMutation({
@@ -35,6 +36,9 @@ export default function CreateGeneralProgram() {
       shortName,
     };
     mutate(data);
+    setName("");
+    setDescription("");
+    setShortName("");
   };
 
   const session = useSession();
@@ -49,44 +53,48 @@ export default function CreateGeneralProgram() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
   if (session?.data?.user?.role === 1) {
-  return (
-    <Layout>
-      <Container>
-        <form onSubmit={handleSend}>
-          <FormControl>
-            <FormLabel htmlFor="name">Title Program</FormLabel>
-            <InputType
-              placeholder="Title Program"
-              value={name}
-              onChange={setName}
-            />
-            <FormErrorMessage></FormErrorMessage>
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="description">Description Program</FormLabel>
+    return (
+      <Layout>
+        <ArrowBack />
+        <Container>
+          <form onSubmit={handleSend}>
+            <FormControl my="12px">
+              <FormLabel htmlFor="name">Назва курсу</FormLabel>
+              <InputType
+                placeholder="Назва курсу"
+                value={name}
+                onChange={setName}
+              />
+              <FormErrorMessage></FormErrorMessage>
+            </FormControl>
+            <FormControl my="12px">
+              <FormLabel htmlFor="shortName">Коротке імя курсу</FormLabel>
+              <InputType
+                placeholder="Коротке імя курсу"
+                value={shortName}
+                onChange={setShortName}
+              />
+              <FormErrorMessage></FormErrorMessage>
+            </FormControl>
+            <FormControl my="12px">
+              <FormLabel htmlFor="description">Опис курсу</FormLabel>
 
-            <InputType
-              placeholder="description"
-              value={description}
-              onChange={setDescription}
-            />
-            <FormErrorMessage></FormErrorMessage>
-          </FormControl>
-          <FormControl>
-            <FormLabel htmlFor="shortName">Short Name</FormLabel>
-            <InputType
-              placeholder="Short Name"
-              value={shortName}
-              onChange={setShortName}
-            />
-            <FormErrorMessage></FormErrorMessage>
-          </FormControl>
-          <Button mt={4} colorScheme="teal" type="submit">
-            Submit
-          </Button>
-        </form>
-      </Container>
-    </Layout>
-  );
+              <InputType
+                type="textarea"
+                height="200px"
+                placeholder="Опис курсу"
+                value={description}
+                onChange={setDescription}
+              />
+              <FormErrorMessage></FormErrorMessage>
+            </FormControl>
+
+            <Button mt={4} variant={"main"} type="submit">
+              Створити
+            </Button>
+          </form>
+        </Container>
+      </Layout>
+    );
   }
 }

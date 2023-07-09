@@ -9,6 +9,6 @@ export default function CompleteIcon({
   size?: number
 }) {
   return (
-    <CheckCircleIcon mr={'4px'} _hover={ {color: 'white'}}  boxSize={size} color={data ? color : "gray.100"} />
+    <CheckCircleIcon mr={'4px'}  boxSize={size} color={data ? color : "gray.100"} />
   );
 }

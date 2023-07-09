@@ -11,6 +11,7 @@ import InputType from "~/components/InputType/InputType";
 import { Layout } from "~/components/Layout";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import ArrowBack from "~/components/ArrowBack/ArrowBack";
 
 interface ColorOption {
   label: string;
@@ -18,7 +19,7 @@ interface ColorOption {
 }
 
 export default function CreateProgram() {
-  const idUse = useId()
+  const idUse = useId();
   const { mutate } = api.program.create.useMutation({
     onSuccess: (err) => {
       if (!err) {
@@ -56,6 +57,11 @@ export default function CreateProgram() {
       coursesPages: choseValue,
     };
     mutate(data);
+
+    setChoseOption([]);
+    setName("");
+    setDescription("");
+    setGeneralProgram("");
   };
   const session = useSession();
   const router = useRouter();
@@ -72,17 +78,24 @@ export default function CreateProgram() {
   if (session?.data?.user?.role === 1) {
     return (
       <Layout>
+        <ArrowBack />
         <Container>
           <form onSubmit={onSubmit}>
-            <Text mb="8px">name:</Text>
-            <InputType placeholder="name" value={name} onChange={setName} />
-            <Text mb="8px">Description Program</Text>
+            <Text my="8px">Назва програми:</Text>
             <InputType
-              placeholder="description"
+              placeholder="Назва програми"
+              value={name}
+              onChange={setName}
+            />
+            <Text my="8px">Опис програми:</Text>
+            <InputType
+              type="textarea"
+              height="200px"
+              placeholder="Опис програми"
               value={description}
               onChange={setDescription}
             />
-            <Text mb="8px">Select Programs</Text>
+            <Text my="8px">Добавити уроки:</Text>
             <Select<ColorOption, true>
               onChange={(e) => handleChoseOption(e)}
               instanceId={idUse}
@@ -94,11 +107,13 @@ export default function CreateProgram() {
                     })
                   : []
               }
-              placeholder="Select some colors..."
+              placeholder="Вибрати уроки"
             />
-            <Text mb="8px">Select main program</Text>
+            <Text my="8px">
+              Вибрати головну курс де буде відображатися програма:
+            </Text>
             <ChakraSelect
-              placeholder="Select option"
+              placeholder="Вибрати головну курс де буде відображатися програма"
               onChange={(e) => handleGeneralProgram(e.target.value)}
             >
               {mainProgram.data &&
@@ -108,8 +123,8 @@ export default function CreateProgram() {
                   </option>
                 ))}
             </ChakraSelect>
-            <Button mt={4} colorScheme="teal" type="submit">
-              Submit
+            <Button mt={4} variant={"main"} type="submit">
+              Створити
             </Button>
           </form>
         </Container>

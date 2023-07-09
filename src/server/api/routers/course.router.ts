@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { CourseSchema } from "~/schema/course.schema";
 import {
   createTRPCRouter,
   publicProcedure,
@@ -9,7 +8,16 @@ import {
 
 export const courseRouter = createTRPCRouter({
   create: protectedAdminProcedure
-    .input(CourseSchema)
+    .input(
+      z.object({
+        name: z.string(),
+        video: z.string(),
+        descriptionCurse: z.string(),
+        img: z.string(),
+        sort: z.number(),
+        theory: z.string(),
+      })
+    )
     .mutation(({ ctx, input }) => {
       return ctx.prisma.curse.create({
         data: {
@@ -17,6 +25,8 @@ export const courseRouter = createTRPCRouter({
           video: input.video,
           descriptionCurse: input.descriptionCurse,
           img: input.img,
+          sort: input.sort,
+          theory: input.theory,
         },
       });
     }),
@@ -58,9 +68,16 @@ export const courseRouter = createTRPCRouter({
           id: +input.curseId,
         },
         include: {
-          task: true,
-          question: true,
-          program: true,
+          task: {
+            orderBy: {
+              sort: "asc",
+            },
+          },
+          question: {
+            orderBy: {
+              sort: "asc",
+            },
+          },
         },
       });
     }),

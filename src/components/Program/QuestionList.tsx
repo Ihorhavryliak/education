@@ -54,7 +54,7 @@ export function QuestionList({
         return (
           <Box key={question.id}>
             <Text>{question.name}</Text>
-            <Button onClick={() => setIsOpenId(question.id)}>Open Modal</Button>
+            <Button variant={'main'} onClick={() => setIsOpenId(question.id)}>Open Modal</Button>
             <ModalWindow
               id={question.id}
               key={question.id}

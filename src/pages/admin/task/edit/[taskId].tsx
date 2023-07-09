@@ -7,15 +7,23 @@ import InputType from "~/components/InputType/InputType";
 import { Layout } from "~/components/Layout";
 import { api } from "~/utils/api";
 
-export default function TaskCreate() {
-  const { mutate } = api.task.create.useMutation({
+export default function TaskEdit() {
+  const session = useSession();
+  const router = useRouter();
+
+  const { data: lessons } = api.course.all.useQuery();
+  const { data: taskData } = api.task.getById.useQuery(
+    { taskId: router.query.taskId as string },
+    { enabled: router.query.taskId ? true : false }
+  );
+
+  const { mutate } = api.task.update.useMutation({
     onSuccess: (err) => {
       if (!err) {
         console.log("Todo completed 🎉");
       }
     },
   });
-  const { data: lessons } = api.course.all.useQuery();
 
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
@@ -24,12 +32,37 @@ export default function TaskCreate() {
   const [curseId, setCurseId] = useState("");
   const [taskVideoSolution, setTaskVideoSolution] = useState("");
   const [lessonSolution, setLessonSolution] = useState("");
-  
+
+  useEffect(() => {
+    if (taskData?.name) {
+      setTaskName(taskData?.name);
+    }
+    if (taskData?.description) {
+      setTaskDescription(taskData?.description);
+    }
+    if (taskData?.video) {
+      setTaskVideo(taskData?.video);
+    }
+    if (taskData?.sort) {
+      setTaskSort(taskData?.sort.toString());
+    }
+    if (taskData?.curseId) {
+      setCurseId(taskData?.curseId.toString());
+    }
+    if (taskData?.lessonSolution) {
+      setLessonSolution(taskData?.lessonSolution);
+    }
+    if (taskData?.videoSolution) {
+      setTaskVideoSolution(taskData?.videoSolution);
+    }
+  }, [taskData]);
+
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.stopPropagation();
     e.preventDefault();
-
+    const taskIdRouter = router.query.taskId as string;
     const data = {
+      id: +taskIdRouter,
       name: taskName,
       video: taskVideo,
       description: taskDescription,
@@ -40,9 +73,6 @@ export default function TaskCreate() {
     };
     mutate(data);
   };
-
-  const session = useSession();
-  const router = useRouter();
 
   useEffect(() => {
     if (
@@ -57,7 +87,7 @@ export default function TaskCreate() {
   if (session?.data?.user?.role === 1) {
     return (
       <Layout>
-        <ArrowBack/>
+        <ArrowBack />
         <Container>
           <form onSubmit={onSubmit}>
             <Text my="8px">Імя завдання:</Text>
@@ -68,8 +98,8 @@ export default function TaskCreate() {
             />
             <Text my="8px">Опис завдання</Text>
             <InputType
-             type="textarea"
-             height='200px'
+              type="textarea"
+              height="200px"
               placeholder="Опис завдання"
               value={taskDescription}
               onChange={setTaskDescription}
@@ -83,7 +113,7 @@ export default function TaskCreate() {
             <Text my="8px">Рішення завдання</Text>
             <InputType
               type="textarea"
-              height='200px'
+              height="200px"
               placeholder="Рішення завдання"
               value={lessonSolution}
               onChange={setLessonSolution}
@@ -96,10 +126,9 @@ export default function TaskCreate() {
               onChange={setTaskVideoSolution}
             />
 
-
-
             <Text my="8px">Вибрати урок</Text>
             <Select
+              value={curseId}
               placeholder="Вибрати урок"
               onChange={(e) => setCurseId(e.target.value)}
             >
@@ -117,8 +146,8 @@ export default function TaskCreate() {
               onChange={setTaskSort}
             />
 
-            <Button mt={4} colorScheme="teal" type="submit">
-              Create
+            <Button variant={"main"} mt={4} colorScheme="teal" type="submit">
+              Зберегти
             </Button>
           </form>
         </Container>

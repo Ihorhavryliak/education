@@ -58,6 +58,8 @@ const load = defineStyle({
     bg: "primary.100 ",
   },
   _disabled: {
+    cursor: 'pointer',
+    opacity: 1,
     color: "primary.100 !important",
     bg: "primary.200 !important" ,
   },

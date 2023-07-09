@@ -15,6 +15,8 @@ export const taskRouter = createTRPCRouter({
         description: z.string(),
         video: z.string(),
         curseId: z.number(),
+        videoSolution: z.string(),
+        lessonSolution: z.string(),
       })
     )
     .mutation(({ ctx, input }) => {
@@ -25,6 +27,8 @@ export const taskRouter = createTRPCRouter({
           description: input.description,
           sort: input.sort,
           curseId: input.curseId,
+          videoSolution: input.videoSolution,
+          lessonSolution: input.lessonSolution,
         },
       });
     }),
@@ -37,6 +41,9 @@ export const taskRouter = createTRPCRouter({
         sort: z.number(),
         description: z.string(),
         video: z.string(),
+        curseId: z.number(),
+        videoSolution: z.string(),
+        lessonSolution: z.string(),
       })
     )
     .mutation(({ ctx, input }) => {
@@ -46,9 +53,12 @@ export const taskRouter = createTRPCRouter({
         },
         data: {
           name: input.name,
+          video: input.video,
           description: input.description,
           sort: input.sort,
-          video: input.video,
+          curseId: input.curseId,
+          videoSolution: input.videoSolution,
+          lessonSolution: input.lessonSolution,
         },
       });
     }),
@@ -73,17 +83,21 @@ export const taskRouter = createTRPCRouter({
     return await ctx.prisma.task.findMany();
   }),
   getById: protectedProcedure
-    .input(z.object({ curseId: z.string() }))
+    .input(z.object({ taskId: z.string() }))
     .query(async ({ ctx, input }) => {
-      return await ctx.prisma.curse.findFirst({
+      return await ctx.prisma.task.findFirst({
         where: {
-          id: +input.curseId,
-        },
-        include: {
-          task: true,
-          question: true,
-          program: true,
-        },
+          id: +input.taskId,
+        }
+      });
+    }),
+    delete: protectedAdminProcedure
+    .input(z.object({ taskId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.task.delete({
+        where: {
+          id: +input.taskId,
+        }
       });
     }),
 });

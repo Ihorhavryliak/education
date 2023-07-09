@@ -30,7 +30,8 @@ export const questionRouter = createTRPCRouter({
   update: protectedAdminProcedure
     .input(
       z.object({
-        id: z.number(),
+        id: z.string(),
+        curseId: z.number(),
         name: z.string(),
         answer: z.string(),
         sort: z.number(),
@@ -39,12 +40,13 @@ export const questionRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       return ctx.prisma.question.update({
         where: {
-          id: input.id,
+          id: +input.id,
         },
         data: {
           name: input.name,
           answer: input.answer,
           sort: input.sort,
+          curseId: input.curseId,
         },
       });
     }),
@@ -52,17 +54,21 @@ export const questionRouter = createTRPCRouter({
     return await ctx.prisma.question.findMany();
   }),
   getById: protectedProcedure
-    .input(z.object({ curseId: z.string() }))
+    .input(z.object({ questionId: z.string() }))
     .query(async ({ ctx, input }) => {
-      return await ctx.prisma.curse.findFirst({
+      return await ctx.prisma.question.findFirst({
         where: {
-          id: +input.curseId,
+          id: +input.questionId,
         },
-        include: {
-          task: true,
-          question: true,
-          program: true,
-        },
+      });
+    }),
+    delete: protectedAdminProcedure
+    .input(z.object({ questionId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.prisma.question.delete({
+        where: {
+          id: +input.questionId,
+        }
       });
     }),
 });

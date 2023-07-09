@@ -5,6 +5,7 @@ import {
   Button,
   Container,
   Text,
+  Box,
 } from "@chakra-ui/react";
 import { api } from "~/utils/api";
 import { type FormEvent, useState, useEffect, useMemo } from "react";
@@ -14,6 +15,7 @@ import { useRouter } from "next/router";
 
 import { QuestionList } from "../../../../components/Program/QuestionList";
 import { TaskList } from "~/components/Program/TaskList";
+import ArrowBack from "~/components/ArrowBack/ArrowBack";
 
 export default function CreateCurse() {
   const router = useRouter();
@@ -85,6 +87,9 @@ export default function CreateCurse() {
     if (lessonData?.url) {
       setUrl(lessonData?.url);
     }
+    if (lessonData?.sort) {
+      setSort(lessonData?.sort.toString());
+    }
   }, [lessonData]);
 
   useMemo(() => {
@@ -149,7 +154,8 @@ export default function CreateCurse() {
   };
   const onSubmitQuestion = (id: number) => {
     const data = {
-      id: id,
+      id: id.toString(),
+      curseId: curseId ? +curseId : 1,
       name: questionName,
       answer,
       sort: +questionSort,
@@ -157,81 +163,92 @@ export default function CreateCurse() {
     questionMutate(data);
   };
   const onSubmitTask = (id: number) => {
-    const data = {
+    /*  const data = {
       id: id,
       name: taskName,
       description: taskDescription,
       video: taskVideo,
       sort: +taskSort,
     };
-    taskMutate(data);
+    taskMutate(data); */
   };
 
   return (
     <Layout>
+      <ArrowBack />
       <Container>
         <form onSubmit={onSubmit}>
           <FormControl my="8px">
-            <FormLabel htmlFor="name">First name</FormLabel>
-            <InputType value={name} onChange={setName} placeholder="name" />
+            <FormLabel htmlFor="name">Назва уроку</FormLabel>
+            <InputType
+              value={name}
+              onChange={setName}
+              placeholder="Назва уроку"
+            />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
           <FormControl my="8px">
-            <FormLabel htmlFor="video">video</FormLabel>
-            <InputType value={video} onChange={setVideo} placeholder="video" />
-            <FormErrorMessage></FormErrorMessage>
-          </FormControl>
-          <FormControl my="8px">
-            <FormLabel htmlFor="descriptionCurse">descriptionCurse</FormLabel>
+            <FormLabel htmlFor="descriptionCurse">Опис уроку</FormLabel>
             <InputType
               height="200px"
               type="textarea"
               size="lg"
               value={description}
               onChange={setDescription}
-              placeholder="description curse"
+              placeholder="Опис уроку"
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
           <FormControl my="8px">
-            <FormLabel htmlFor="shortName">Image</FormLabel>
+            <FormLabel htmlFor="video">Посилання на відео уроку</FormLabel>
+            <InputType
+              value={video}
+              onChange={setVideo}
+              placeholder="Посилання на відео уроку"
+            />
+            <FormErrorMessage></FormErrorMessage>
+          </FormControl>
+         
+          {/* <FormControl my="8px">
+            <FormLabel htmlFor="shortName">Фото уроку</FormLabel>
             <InputType
               value={shortName}
               onChange={setShortName}
-              placeholder="Short Name"
+              placeholder="Фото уроку"
             />
             <FormErrorMessage></FormErrorMessage>
-          </FormControl>
+          </FormControl> */}
+          
           <FormControl my="8px">
-            <FormLabel htmlFor="sort">Sort</FormLabel>
-            <InputType value={sort} onChange={setSort} placeholder="sort" />
-            <FormErrorMessage></FormErrorMessage>
-          </FormControl>
-          <FormControl my="8px">
-            <FormLabel htmlFor="sort">Theory</FormLabel>
+            <FormLabel htmlFor="sort">Теорія до уроку</FormLabel>
             <InputType
               height="200px"
               type="textarea"
               size="lg"
               value={theory}
               onChange={setTheory}
-              placeholder="theory"
+              placeholder="Теорія до уроку"
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
           <FormControl my="8px">
-            <FormLabel htmlFor="sort">url</FormLabel>
-            <InputType value={url} onChange={setUrl} placeholder="url" />
+            <FormLabel htmlFor="sort">Порядок сортування</FormLabel>
+            <InputType value={sort} onChange={setSort} placeholder="sort" />
+            <FormErrorMessage></FormErrorMessage>
+          </FormControl>
+          <FormControl my="8px">
+            <FormLabel htmlFor="sort">url уроку</FormLabel>
+            <InputType value={url} onChange={setUrl} placeholder="url уроку" />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
 
-          <Button mt={4} colorScheme="teal" type="submit">
+          <Button mt={4} variant={'main'} type="submit">
             Зберегти
           </Button>
         </form>
-
-        <Text mt="2rem" mb="8px" my="8px">
-          Question
+          <Box mt='7rem'>
+        <Text mt="4rem" mb="8px" my="8px">
+          Питання
         </Text>
         <QuestionList
           questionData={questionData}
@@ -246,7 +263,7 @@ export default function CreateCurse() {
           onSubmitQuestion={onSubmitQuestion}
         />
         <Text mt="2rem" mb="8px" my="8px">
-          Task
+          Завдання
         </Text>
         <TaskList
           questionData={taskData}
@@ -262,6 +279,7 @@ export default function CreateCurse() {
           taskSort={taskSort}
           setTaskSort={setTaskSort}
         />
+        </Box>
       </Container>
     </Layout>
   );

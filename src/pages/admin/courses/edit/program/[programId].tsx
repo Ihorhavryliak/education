@@ -10,6 +10,7 @@ import { type FormEvent, useEffect, useId, useState } from "react";
 import InputType from "~/components/InputType/InputType";
 import { Layout } from "~/components/Layout";
 import { useRouter } from "next/router";
+import ArrowBack from "~/components/ArrowBack/ArrowBack";
 
 interface ColorOption {
   label: string;
@@ -91,13 +92,14 @@ export default function CreateProgram() {
   };
   return (
     <Layout>
+      <ArrowBack />
       <Container>
         <form onSubmit={onSubmit}>
-          <Text mb="8px">name:</Text>
-          <InputType placeholder="name" value={name} onChange={setName} />
-          <Text mb="8px">Description Program</Text>
+          <Text mb="8px">Назва програми:</Text>
+          <InputType placeholder="Назва програми" value={name} onChange={setName} />
+          <Text mb="8px">Опис програми</Text>
           <InputType
-            placeholder="description"
+            placeholder="Опис програми"
             value={description}
             onChange={setDescription}
           />
