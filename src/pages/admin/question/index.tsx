@@ -44,13 +44,13 @@ export default function QuestionCreate() {
           <Box mb='1rem'>
             <Link variant={'button'} href={"/admin/question/create"}>Створити питання</Link>
           </Box>
-          <Flex gap={"15px"}>
+          <Flex gap={"15px"}     flexWrap='wrap'>
             {questionData?.map((question) => {
               return (
-                <Card key={question.id} color='gray.400'>
+                <Card key={question.id} color='gray.400' maxW={'350px'}>
                   <CardBody>
                     <Text>{question.name}</Text>
-                    <Box> {question.answer} </Box>
+                    <Box noOfLines={2}> {question.answer} </Box>
                     <Link   variant={"button"} href={`/admin/question/edit/${question.id}`}>
                       Редагувати питання
                     </Link>

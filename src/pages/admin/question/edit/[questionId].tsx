@@ -90,6 +90,7 @@ console.log(taskData, 'taskData')
           />
           <Text my="8px">Вибрати урок де буде відображатися питання:</Text>
           <Select
+          value={curseId}
             placeholder="Вибрати урок де буде відображатися питання"
             onChange={(e) => setCurseId(e.target.value)}
           >

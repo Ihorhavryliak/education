@@ -56,7 +56,7 @@ export default function QuestionCreate() {
         <form onSubmit={onSubmit}>
           <Text my="8px">Назва питання:</Text>
           <InputType
-            placeholder="name"
+            placeholder="Назва питання"
             value={questionName}
             onChange={setQuestionName}
           />
@@ -71,6 +71,7 @@ export default function QuestionCreate() {
           />
           <Text my="8px">Вибрати урок де буде відображатися питання:</Text>
           <Select
+          value={curseId}
             placeholder="Вибрати урок де буде відображатися питання"
             onChange={(e) => setCurseId(e.target.value)}
           >

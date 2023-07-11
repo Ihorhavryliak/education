@@ -24,7 +24,7 @@ export default function TaskCreate() {
   const [curseId, setCurseId] = useState("");
   const [taskVideoSolution, setTaskVideoSolution] = useState("");
   const [lessonSolution, setLessonSolution] = useState("");
-  
+
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.stopPropagation();
     e.preventDefault();
@@ -39,6 +39,13 @@ export default function TaskCreate() {
       lessonSolution,
     };
     mutate(data);
+    setTaskName("");
+    setTaskDescription("");
+    setTaskVideo("");
+    setTaskSort("");
+    setCurseId("");
+    setTaskVideoSolution("");
+    setLessonSolution("");
   };
 
   const session = useSession();
@@ -57,19 +64,19 @@ export default function TaskCreate() {
   if (session?.data?.user?.role === 1) {
     return (
       <Layout>
-        <ArrowBack/>
+        <ArrowBack />
         <Container>
           <form onSubmit={onSubmit}>
-            <Text my="8px">Імя завдання:</Text>
+            <Text my="8px">Назва завдання:</Text>
             <InputType
-              placeholder="Імя завдання"
+              placeholder="Назва завдання"
               value={taskName}
               onChange={setTaskName}
             />
             <Text my="8px">Опис завдання</Text>
             <InputType
-             type="textarea"
-             height='200px'
+              type="textarea"
+              height="200px"
               placeholder="Опис завдання"
               value={taskDescription}
               onChange={setTaskDescription}
@@ -83,7 +90,7 @@ export default function TaskCreate() {
             <Text my="8px">Рішення завдання</Text>
             <InputType
               type="textarea"
-              height='200px'
+              height="200px"
               placeholder="Рішення завдання"
               value={lessonSolution}
               onChange={setLessonSolution}
@@ -95,8 +102,6 @@ export default function TaskCreate() {
               value={taskVideoSolution}
               onChange={setTaskVideoSolution}
             />
-
-
 
             <Text my="8px">Вибрати урок</Text>
             <Select

@@ -32,9 +32,11 @@ export default function TaskEdit() {
   const [curseId, setCurseId] = useState("");
   const [taskVideoSolution, setTaskVideoSolution] = useState("");
   const [lessonSolution, setLessonSolution] = useState("");
-
+  const [countUpdate, setCountUpdate] = useState(0);
   useEffect(() => {
+    if(countUpdate === 1) return
     if (taskData?.name) {
+      setCountUpdate(1)
       setTaskName(taskData?.name);
     }
     if (taskData?.description) {

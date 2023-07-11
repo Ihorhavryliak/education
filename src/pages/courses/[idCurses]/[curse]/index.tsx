@@ -262,7 +262,11 @@ export default function Curse() {
                             <Box>Опис завдання:</Box>
                             {task.description && (
                               <Box my="1rem" bg="primary.400" p="1rem">
-                                {task.description}
+                                <Box
+                                  dangerouslySetInnerHTML={{
+                                    __html: task.description,
+                                  }}
+                                />
                               </Box>
                             )}
 
@@ -395,14 +399,14 @@ export default function Curse() {
                     Питання для співбесіди
                   </Heading>
                 </Flex>
-                <Accordion defaultIndex={[]} allowMultiple>
-                  {data.question.map((question) => {
+                <Accordion defaultIndex={[]} allowMultiple >
+                  {data.question.map((question, index) => {
                     return (
                       <AccordionItem key={question.id}>
                         <h2>
-                          <AccordionButton>
+                          <AccordionButton >
                             <Box as="span" flex="1" textAlign="left">
-                              {question.name}
+                            {index + 1}.  {question.name}
                             </Box>
                             <AccordionIcon />
                           </AccordionButton>

@@ -67,10 +67,12 @@ export default function CreateCurse() {
   const [taskDescription, setTaskDescription] = useState("");
   const [taskVideo, setTaskVideo] = useState("");
   const [taskSort, setTaskSort] = useState("");
-
+  const [countLoad, setCountLoad]= useState(0);
   useEffect(() => {
+    if(countLoad === 1) return
     if (lessonData?.name) {
       setName(lessonData?.name);
+      setCountLoad(1)
     }
     if (lessonData?.video) {
       setVideo(lessonData?.video);
