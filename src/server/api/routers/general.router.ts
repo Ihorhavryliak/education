@@ -52,4 +52,13 @@ export const generalProgramRouter = createTRPCRouter({
         },
       });
     }),
+  delete: protectedAdminProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.generalProgram.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
 });

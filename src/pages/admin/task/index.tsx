@@ -6,6 +6,7 @@ import {
   CardBody,
   Container,
   Flex,
+  Heading,
   Text,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
@@ -33,7 +34,7 @@ export default function TaskCreate() {
   
   useEffect(() => {
     if (
-      (!(session.status === "loading") && !session?.data) ||
+      session.status !== "loading" &&
       session?.data?.user?.role !== 1
     ) {
       void router.push("/");
@@ -50,15 +51,15 @@ export default function TaskCreate() {
         <ArrowBack />
         <Container>
           <Box my="25px">
-            <Link href={"/admin/task/create"}>Створити завдання</Link>
+            <Link variant={"button"}  href={"/admin/task/create"}>Створити завдання</Link>
           </Box>
-          <Flex gap={"15px"}>
+          <Flex gap={"15px"} flexWrap={'wrap'}>
             {taskData?.map((task) => {
               return (
-                <Card key={task.id}>
+                <Card key={task.id} w='450px'>
                   <CardBody color={"gray.400"}>
-                    <Text>{task.name}</Text>
-                    <Text mb="1rem"> {task.description} </Text>
+                    <Heading fontSize={'18px'} >{task.name}</Heading>
+                    <Text mb="1rem" noOfLines={1}> {task.description} </Text>
                     <Link  variant={"button"} href={`/admin/task/edit/${task.id}`}>
                       Редагувати завдання
                     </Link>

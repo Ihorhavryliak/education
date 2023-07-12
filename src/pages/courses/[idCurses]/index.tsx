@@ -130,7 +130,7 @@ export default function CursePage() {
                                 size={50}
                                 strokeWidth={2}
                                 percentage={
-                                  mainCur &&
+                                  mainCur && mainCur?.coursesPages.length > 0 ?
                                   Math.round(
                                     (mainCur?.coursesPages?.filter(
                                       (cursePage) =>
@@ -143,6 +143,8 @@ export default function CursePage() {
                                       mainCur?.coursesPages.length) *
                                       100
                                   )
+                                  :
+                                  0
                                 }
                                 color={
                                   mainCur &&

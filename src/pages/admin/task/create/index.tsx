@@ -43,7 +43,6 @@ export default function TaskCreate() {
     setTaskDescription("");
     setTaskVideo("");
     setTaskSort("");
-    setCurseId("");
     setTaskVideoSolution("");
     setLessonSolution("");
   };
@@ -53,7 +52,7 @@ export default function TaskCreate() {
 
   useEffect(() => {
     if (
-      (!(session.status === "loading") && !session?.data) ||
+      session.status !== "loading" &&
       session?.data?.user?.role !== 1
     ) {
       void router.push("/");
@@ -67,13 +66,13 @@ export default function TaskCreate() {
         <ArrowBack />
         <Container>
           <form onSubmit={onSubmit}>
-            <Text my="8px">Назва завдання:</Text>
+            <Text my="1rem">Назва завдання:</Text>
             <InputType
               placeholder="Назва завдання"
               value={taskName}
               onChange={setTaskName}
             />
-            <Text my="8px">Опис завдання</Text>
+            <Text my="1rem">Опис завдання</Text>
             <InputType
               type="textarea"
               height="200px"
@@ -81,13 +80,13 @@ export default function TaskCreate() {
               value={taskDescription}
               onChange={setTaskDescription}
             />
-            <Text my="8px">Посилання на відео</Text>
+            <Text my="1rem">Посилання на відео</Text>
             <InputType
               placeholder="Посилання на відео"
               value={taskVideo}
               onChange={setTaskVideo}
             />
-            <Text my="8px">Рішення завдання</Text>
+            <Text my="1rem">Рішення завдання</Text>
             <InputType
               type="textarea"
               height="200px"
@@ -96,25 +95,25 @@ export default function TaskCreate() {
               onChange={setLessonSolution}
             />
 
-            <Text my="8px">Посилання на відео рішення</Text>
+            <Text my="1rem">Посилання на відео рішення</Text>
             <InputType
               placeholder="Посилання на відео рішення"
               value={taskVideoSolution}
               onChange={setTaskVideoSolution}
             />
 
-            <Text my="8px">Вибрати урок</Text>
+            <Text my="1rem">Вибрати урок</Text>
             <Select
               placeholder="Вибрати урок"
               onChange={(e) => setCurseId(e.target.value)}
             >
               {lessons?.map((lesson) => (
-                <option key={lesson.id} value={lesson.id}>
+                <option key={lesson.id} value={lesson.id}  style={{background: "#000"}}>
                   {lesson.name}
                 </option>
               ))}
             </Select>
-            <Text my="8px">Номер сортування</Text>
+            <Text my="1rem">Номер сортування</Text>
             <InputType
               type="number"
               placeholder="Номер сортування"
@@ -122,8 +121,8 @@ export default function TaskCreate() {
               onChange={setTaskSort}
             />
 
-            <Button mt={4} colorScheme="teal" type="submit">
-              Create
+            <Button variant={'main'} mt={4}  type="submit">
+              Створити
             </Button>
           </form>
         </Container>

@@ -55,7 +55,7 @@ export function TaskList({
   setTaskSort,
 }: TaskListType) {
   return (
-    <Flex>
+    <Flex flexWrap={'wrap'} gap='30px'>
       {questionData?.map((question) => {
         return (
           <Box key={question.id}>

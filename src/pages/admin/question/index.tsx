@@ -24,7 +24,7 @@ export default function QuestionCreate() {
 
   useEffect(() => {
     if (
-      (!(session.status === "loading") && !session?.data) ||
+      session.status !== "loading" &&
       session?.data?.user?.role !== 1
     ) {
       void router.push("/");

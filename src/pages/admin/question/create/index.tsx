@@ -34,14 +34,13 @@ export default function QuestionCreate() {
     setQuestionName("");
     setAnswer("");
     setQuestionSort("");
-    setCurseId("");
   };
 
   const session = useSession();
   const router = useRouter();
   useEffect(() => {
     if (
-      (!(session.status === "loading") && !session?.data) ||
+      session.status !== "loading" &&
       session?.data?.user?.role !== 1
     ) {
       void router.push("/");
@@ -76,7 +75,7 @@ export default function QuestionCreate() {
             onChange={(e) => setCurseId(e.target.value)}
           >
             {lessons?.map((lesson) => (
-              <option key={lesson.id} value={lesson.id}>
+              <option style={{background: "#000"}}  key={lesson.id} value={lesson.id}>
                 {lesson.name}
               </option>
             ))}

@@ -45,7 +45,7 @@ export default function CreateGeneralProgram() {
   const router = useRouter();
   useEffect(() => {
     if (
-      (!(session.status === "loading") && !session?.data) ||
+      session.status !== "loading" &&
       session?.data?.user?.role !== 1
     ) {
       void router.push("/");

@@ -19,6 +19,13 @@ export default function CreateCurse() {
     onSuccess: (err) => {
       if (!err) {
         console.log("Todo completed 🎉");
+      } else {
+        setName("");
+        setVideo("");
+        setDescription("");
+        setShortName("");
+        setTheory("");
+        setSort("");
       }
     },
   });
@@ -30,6 +37,7 @@ export default function CreateCurse() {
 
   const [theory, setTheory] = useState("");
   const [sort, setSort] = useState("");
+
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.stopPropagation();
     e.preventDefault();
@@ -48,10 +56,7 @@ export default function CreateCurse() {
   const session = useSession();
   const router = useRouter();
   useEffect(() => {
-    if (
-      (!(session.status === "loading") && !session?.data) ||
-      session?.data?.user?.role !== 1
-    ) {
+    if (session.status !== "loading" && session?.data?.user?.role !== 1) {
       void router.push("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,7 +70,11 @@ export default function CreateCurse() {
           <form onSubmit={onSubmit}>
             <FormControl mt="8px">
               <FormLabel htmlFor="name">Імя уроку</FormLabel>
-              <InputType value={name} onChange={setName} placeholder="Імя уроку" />
+              <InputType
+                value={name}
+                onChange={setName}
+                placeholder="Імя уроку"
+              />
               <FormErrorMessage></FormErrorMessage>
             </FormControl>
             <FormControl mt="8px">
@@ -80,6 +89,8 @@ export default function CreateCurse() {
             <FormControl mt="8px">
               <FormLabel htmlFor="descriptionCurse">Опис уроку</FormLabel>
               <InputType
+                type="textarea"
+                height="200px"
                 value={description}
                 onChange={setDescription}
                 placeholder="Опис уроку"
@@ -110,7 +121,6 @@ export default function CreateCurse() {
             <FormControl mt="8px">
               <FormLabel htmlFor="shortName">Порядок сортування</FormLabel>
               <InputType
-     
                 value={sort}
                 onChange={setSort}
                 placeholder="Порядок сортування"

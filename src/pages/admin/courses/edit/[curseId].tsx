@@ -224,7 +224,7 @@ export default function CreateCurse() {
           <FormControl my="8px">
             <FormLabel htmlFor="sort">Теорія до уроку</FormLabel>
             <InputType
-              height="200px"
+              height="600px"
               type="textarea"
               size="lg"
               value={theory}

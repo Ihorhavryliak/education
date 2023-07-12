@@ -12,7 +12,7 @@ import { Layout } from "~/components/Layout";
 import { useRouter } from "next/router";
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
 
-interface ColorOption {
+interface LessonOption {
   label: string;
   value: string; // Change the type to string
 }
@@ -21,6 +21,13 @@ export default function CreateProgram() {
   const router = useRouter();
   const programId = router?.query?.programId as string;
   const { mutate } = api.program.update.useMutation({
+    onSuccess: (err) => {
+      if (!err) {
+        console.log("Todo completed 🎉");
+      }
+    },
+  });
+  const { mutate: mutateLesson  } = api.program.deleteConnectLesson.useMutation({
     onSuccess: (err) => {
       if (!err) {
         console.log("Todo completed 🎉");
@@ -38,8 +45,13 @@ export default function CreateProgram() {
   );
 
   //chose tags multiple
-  const [choseOption, setChoseOption] = useState<MultiValue<ColorOption>>([]);
-  const handleChoseOption = (e: MultiValue<ColorOption>) => {
+  const [choseOption, setChoseOption] = useState<MultiValue<LessonOption>>([]);
+  const handleChoseOption = (e: MultiValue<LessonOption>) => {
+    const findOption = choseOption.find(option=>!e.includes(option))
+    if(findOption){
+      mutateLesson({ id: +programId, lessonId: +findOption.value} )
+    }
+    debugger
     setChoseOption(e);
   };
   //chose name
@@ -95,16 +107,16 @@ export default function CreateProgram() {
       <ArrowBack />
       <Container>
         <form onSubmit={onSubmit}>
-          <Text mb="8px">Назва програми:</Text>
+          <Text my="1rem">Назва програми:</Text>
           <InputType placeholder="Назва програми" value={name} onChange={setName} />
-          <Text mb="8px">Опис програми</Text>
+          <Text my="1rem">Опис програми</Text>
           <InputType
             placeholder="Опис програми"
             value={description}
             onChange={setDescription}
           />
-          <Text mb="8px">Select Programs</Text>
-          <Select<ColorOption, true>
+          <Text my="1rem">Вибрати уроки</Text>
+          <Select<LessonOption, true>
             onChange={(e) => handleChoseOption(e)}
             instanceId={useId()}
             isMulti
@@ -116,9 +128,9 @@ export default function CreateProgram() {
                   })
                 : []
             }
-            placeholder="Select Programs..."
+            placeholder="Вибрати уроки"
           />
-          <Text mb="8px">Select main program</Text>
+          <Text my="1rem">Вибрати курс</Text>
           <ChakraSelect
             value={generalProgram}
             placeholder="Select main program"
@@ -126,20 +138,20 @@ export default function CreateProgram() {
           >
             {mainProgram.data &&
               mainProgram.data.map((program) => (
-                <option key={program.id} value={program.id}>
+                <option key={program.id} value={program.id}  style={{background: "#000"}}>
                   {program.name}
                 </option>
               ))}
           </ChakraSelect>
-          <Text mb="8px">order:</Text>
+          <Text my="1rem">order:</Text>
           <InputType
             placeholder="order"
             type="number"
             value={order}
             onChange={setOrder}
           />
-          <Button mt={4} colorScheme="teal" type="submit">
-            Submit
+          <Button variant={'main'} mt={4} colorScheme="teal" type="submit">
+            Зберегти
           </Button>
         </form>
       </Container>

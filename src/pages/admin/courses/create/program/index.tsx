@@ -67,7 +67,7 @@ export default function CreateProgram() {
   const router = useRouter();
   useEffect(() => {
     if (
-      (!(session.status === "loading") && !session?.data) ||
+      session.status !== "loading" &&
       session?.data?.user?.role !== 1
     ) {
       void router.push("/");
@@ -118,7 +118,7 @@ export default function CreateProgram() {
             >
               {mainProgram.data &&
                 mainProgram.data.map((program) => (
-                  <option key={program.id} value={program.id}>
+                  <option key={program.id}  style={{background: "#000"}} value={program.id}>
                     {program.name}
                   </option>
                 ))}

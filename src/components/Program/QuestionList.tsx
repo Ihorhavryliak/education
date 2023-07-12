@@ -49,7 +49,7 @@ export function QuestionList({
   onSubmitQuestion,
 }: QuestionListType) {
   return (
-    <Flex>
+    <Flex flexWrap={'wrap'} gap='30px'>
       {questionData?.map((question) => {
         return (
           <Box key={question.id}>

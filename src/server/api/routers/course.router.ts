@@ -84,4 +84,13 @@ export const courseRouter = createTRPCRouter({
   getQuestion: protectedAdminProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.question.findMany();
   }),
+  delete: protectedAdminProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.curse.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
 });

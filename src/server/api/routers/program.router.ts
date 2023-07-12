@@ -62,18 +62,18 @@ export const programRouter = createTRPCRouter({
         include: {
           coursesPages: {
             orderBy: {
-              sort: 'asc'
-            }
-          }
+              sort: "asc",
+            },
+          },
         },
         orderBy: {
-          order: 'asc'
-        }
+          order: "asc",
+        },
       });
       const mainProgram = await ctx.prisma.generalProgram.findFirst({
         where: {
           id: +input.id,
-        }
+        },
       });
       return { program, mainProgram };
     }),
@@ -100,6 +100,35 @@ export const programRouter = createTRPCRouter({
         },
         include: {
           coursesPages: true,
+        },
+      });
+    }),
+  delete: protectedAdminProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.program.delete({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
+
+  deleteConnectLesson: protectedAdminProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        lessonId: z.number(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.program.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          coursesPages: {
+            disconnect: { id: input.lessonId },
+          },
         },
       });
     }),
