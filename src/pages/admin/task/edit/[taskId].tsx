@@ -34,9 +34,9 @@ export default function TaskEdit() {
   const [lessonSolution, setLessonSolution] = useState("");
   const [countUpdate, setCountUpdate] = useState(0);
   useEffect(() => {
-    if(countUpdate === 1) return
+    if (countUpdate === 1) return;
     if (taskData?.name) {
-      setCountUpdate(1)
+      setCountUpdate(1);
       setTaskName(taskData?.name);
     }
     if (taskData?.description) {
@@ -57,6 +57,7 @@ export default function TaskEdit() {
     if (taskData?.videoSolution) {
       setTaskVideoSolution(taskData?.videoSolution);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [taskData]);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -77,10 +78,7 @@ export default function TaskEdit() {
   };
 
   useEffect(() => {
-    if (
-      session.status !== "loading" &&
-      session?.data?.user?.role !== 1
-    ) {
+    if (session.status !== "loading" && session?.data?.user?.role !== 1) {
       void router.push("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -135,7 +133,11 @@ export default function TaskEdit() {
               onChange={(e) => setCurseId(e.target.value)}
             >
               {lessons?.map((lesson) => (
-                <option  style={{background: "#000"}} key={lesson.id} value={lesson.id}>
+                <option
+                  style={{ background: "#000" }}
+                  key={lesson.id}
+                  value={lesson.id}
+                >
                   {lesson.name}
                 </option>
               ))}

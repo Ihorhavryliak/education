@@ -82,6 +82,7 @@ export default function Curse() {
   const [numberLoading, setNumberLoading] = useState(0);
 
   const [solution, setSolution] = useState([{ id: 0, value: "" }]);
+  const [solutionErr, setSolutionErr] = useState([{ id: 0, error: "" }]);
   const handleSolutionOnChange = (val: string, id: number) => {
     if (solution.some((sol) => sol.id === id)) {
       const deleteSolution = solution.filter((sol) => sol.id !== id);
@@ -144,11 +145,20 @@ export default function Curse() {
     if (solutions && solutions?.length > 0 && edit === 0) {
       setSolution(solutions);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const handleSolution = (taskId: number) => {
     setNumberLoading(4);
     const solutionValue = solution.find((sol) => sol.id === taskId);
+
+    setSolutionErr([{ id: 0, error: "" }]);
+    if (solutionValue?.value && solutionValue?.value?.length > 2000) {
+      return setSolutionErr([
+        { id: taskId, error: "Максимально допустима кількість символів 2000" },
+      ]);
+    }
+
     taskMutate({ id: taskId, solution: solutionValue?.value as string });
     setEdit(0);
   };
@@ -308,6 +318,13 @@ export default function Curse() {
                                       ?.value as string
                                   }
                                 />
+                                <Box color={"red.800"}>
+                                  {
+                                    solutionErr.find(
+                                      (sol) => sol.id === task.id
+                                    )?.error
+                                  }
+                                </Box>
                               </Box>
                             )}
                             {edit === task.id && (
@@ -324,6 +341,14 @@ export default function Curse() {
                                       ?.value as string
                                   }
                                 />
+
+                                <Box color={"red.800"}>
+                                  {
+                                    solutionErr.find(
+                                      (sol) => sol.id === task.id
+                                    )?.error
+                                  }
+                                </Box>
                               </Box>
                             )}
                             {(edit === task.id || !task.solution) && (
@@ -399,14 +424,14 @@ export default function Curse() {
                     Питання для співбесіди
                   </Heading>
                 </Flex>
-                <Accordion defaultIndex={[]} allowMultiple >
+                <Accordion defaultIndex={[]} allowMultiple>
                   {data.question.map((question, index) => {
                     return (
                       <AccordionItem key={question.id}>
                         <h2>
-                          <AccordionButton >
+                          <AccordionButton>
                             <Box as="span" flex="1" textAlign="left">
-                            {index + 1}.  {question.name}
+                              {index + 1}. {question.name}
                             </Box>
                             <AccordionIcon />
                           </AccordionButton>

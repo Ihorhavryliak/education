@@ -66,7 +66,7 @@ export const taskRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.number(),
-        solution: z.string(),
+        solution: z.string().max(2000),
       })
     )
     .mutation(({ ctx, input }) => {

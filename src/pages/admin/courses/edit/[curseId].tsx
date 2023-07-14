@@ -4,17 +4,12 @@ import {
   FormControl,
   Button,
   Container,
-  Text,
-  Box,
 } from "@chakra-ui/react";
 import { api } from "~/utils/api";
-import { type FormEvent, useState, useEffect, useMemo } from "react";
+import { type FormEvent, useState, useEffect } from "react";
 import InputType from "~/components/InputType/InputType";
 import { Layout } from "~/components/Layout";
 import { useRouter } from "next/router";
-
-import { QuestionList } from "../../../../components/Program/QuestionList";
-import { TaskList } from "~/components/Program/TaskList";
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
 
 export default function CreateCurse() {
@@ -27,30 +22,13 @@ export default function CreateCurse() {
       }
     },
   });
-  const { mutate: questionMutate } = api.question.update.useMutation({
-    onSuccess: (err) => {
-      if (!err) {
-        console.log("Todo completed 🎉");
-      }
-    },
-  });
-  const { mutate: taskMutate } = api.task.update.useMutation({
-    onSuccess: (err) => {
-      if (!err) {
-        console.log("Todo completed 🎉");
-      }
-    },
-  });
   const { data: lessonData } = api.course.getById.useQuery(
     {
       curseId: curseId as string,
     },
     { enabled: curseId ? true : false }
   );
-  const { data: questionData } = api.question.all.useQuery();
-  const { data: taskData } = api.task.all.useQuery();
 
-  const [isOpenId, setIsOpenId] = useState(0);
   const [name, setName] = useState("");
   const [video, setVideo] = useState("");
   const [description, setDescription] = useState("");
@@ -58,21 +36,12 @@ export default function CreateCurse() {
   const [sort, setSort] = useState("");
   const [theory, setTheory] = useState("");
   const [url, setUrl] = useState("");
-  const [questionName, setQuestionName] = useState("");
-  const [answer, setAnswer] = useState("");
-  const [questionSort, setQuestionSort] = useState("");
-
-  const [isOpenTaskId, setIsOpenTaskId] = useState(0);
-  const [taskName, setTaskName] = useState("");
-  const [taskDescription, setTaskDescription] = useState("");
-  const [taskVideo, setTaskVideo] = useState("");
-  const [taskSort, setTaskSort] = useState("");
-  const [countLoad, setCountLoad]= useState(0);
+  const [countLoad, setCountLoad] = useState(0);
   useEffect(() => {
-    if(countLoad === 1) return
+    if (countLoad === 1) return;
     if (lessonData?.name) {
       setName(lessonData?.name);
-      setCountLoad(1)
+      setCountLoad(1);
     }
     if (lessonData?.video) {
       setVideo(lessonData?.video);
@@ -92,52 +61,8 @@ export default function CreateCurse() {
     if (lessonData?.sort) {
       setSort(lessonData?.sort.toString());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lessonData]);
-
-  useMemo(() => {
-    const question = questionData?.find((question) => question.id === isOpenId);
-    if (question?.sort) {
-      setQuestionSort(question?.sort.toString());
-    } else {
-      setQuestionSort("");
-    }
-    if (question?.answer) {
-      setAnswer(question?.answer);
-    } else {
-      setAnswer("");
-    }
-    if (question?.name) {
-      setQuestionName(question?.name);
-    } else {
-      setQuestionName("");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpenId]);
-
-  useMemo(() => {
-    const task = taskData?.find((task) => task.id === isOpenTaskId);
-    if (task?.sort) {
-      setTaskSort(String(task?.sort));
-    } else {
-      setTaskSort("");
-    }
-    if (task?.video) {
-      setTaskVideo(task?.video);
-    } else {
-      setTaskVideo("");
-    }
-    if (task?.name) {
-      setTaskName(task?.name);
-    } else {
-      setTaskName("");
-    }
-    if (task?.description) {
-      setTaskDescription(task?.description);
-    } else {
-      setTaskDescription("");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpenTaskId]);
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.stopPropagation();
@@ -153,26 +78,6 @@ export default function CreateCurse() {
       theory: theory,
     };
     mutate(data);
-  };
-  const onSubmitQuestion = (id: number) => {
-    const data = {
-      id: id.toString(),
-      curseId: curseId ? +curseId : 1,
-      name: questionName,
-      answer,
-      sort: +questionSort,
-    };
-    questionMutate(data);
-  };
-  const onSubmitTask = (id: number) => {
-    /*  const data = {
-      id: id,
-      name: taskName,
-      description: taskDescription,
-      video: taskVideo,
-      sort: +taskSort,
-    };
-    taskMutate(data); */
   };
 
   return (
@@ -210,17 +115,7 @@ export default function CreateCurse() {
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-         
-          {/* <FormControl my="8px">
-            <FormLabel htmlFor="shortName">Фото уроку</FormLabel>
-            <InputType
-              value={shortName}
-              onChange={setShortName}
-              placeholder="Фото уроку"
-            />
-            <FormErrorMessage></FormErrorMessage>
-          </FormControl> */}
-          
+
           <FormControl my="8px">
             <FormLabel htmlFor="sort">Теорія до уроку</FormLabel>
             <InputType
@@ -244,44 +139,10 @@ export default function CreateCurse() {
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
 
-          <Button mt={4} variant={'main'} type="submit">
+          <Button mt={4} variant={"main"} type="submit">
             Зберегти
           </Button>
         </form>
-          <Box mt='7rem'>
-        <Text mt="4rem" mb="8px" my="8px">
-          Питання
-        </Text>
-        <QuestionList
-          questionData={questionData}
-          setIsOpenId={setIsOpenId}
-          isOpenId={isOpenId}
-          questionName={questionName}
-          setQuestionName={setQuestionName}
-          answer={answer}
-          setAnswer={setAnswer}
-          questionSort={questionSort}
-          setQuestionSort={setQuestionSort}
-          onSubmitQuestion={onSubmitQuestion}
-        />
-        <Text mt="2rem" mb="8px" my="8px">
-          Завдання
-        </Text>
-        <TaskList
-          questionData={taskData}
-          setIsOpenId={setIsOpenTaskId}
-          isOpenId={isOpenTaskId}
-          questionName={taskName}
-          setQuestionName={setTaskName}
-          video={taskVideo}
-          setVideo={setTaskVideo}
-          description={taskDescription}
-          setDescription={setTaskDescription}
-          onSubmitQuestion={onSubmitTask}
-          taskSort={taskSort}
-          setTaskSort={setTaskSort}
-        />
-        </Box>
       </Container>
     </Layout>
   );

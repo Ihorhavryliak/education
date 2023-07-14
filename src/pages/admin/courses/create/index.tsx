@@ -128,8 +128,8 @@ export default function CreateCurse() {
             </FormControl>
 
             <Box textAlign={"right"}>
-              <Button mt={4} colorScheme="teal" type="submit">
-                Сторити
+              <Button  mt={4} variant={'main'} type="submit">
+                Створити
               </Button>
             </Box>
           </form>

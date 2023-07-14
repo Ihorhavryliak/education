@@ -7,6 +7,7 @@ type InputType = {
   placeholder?: string;
   size?: string;
   height?: string;
+  disabled?: boolean;
 };
 
 export default function InputType({
@@ -16,6 +17,7 @@ export default function InputType({
   height = "auto",
   onChange,
   placeholder = "",
+  disabled = false,
 }: InputType) {
   const handleName = (
     e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
@@ -27,6 +29,7 @@ export default function InputType({
     case "textarea":
       return (
         <Textarea
+          disabled={disabled}
           size={size}
           minHeight={height}
           placeholder={placeholder}
@@ -37,6 +40,7 @@ export default function InputType({
     case "number":
       return (
         <Input
+          disabled={disabled}
           type="number"
           placeholder={placeholder}
           value={value}
@@ -45,7 +49,12 @@ export default function InputType({
       );
     default:
       return (
-        <Input placeholder={placeholder} value={value} onChange={handleName} />
+        <Input
+          disabled={disabled}
+          placeholder={placeholder}
+          value={value}
+          onChange={handleName}
+        />
       );
   }
 }
