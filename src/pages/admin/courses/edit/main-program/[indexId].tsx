@@ -32,9 +32,11 @@ export default function CreateGeneralProgram() {
 
   //chose namesx
   const [name, setName] = useState("");
+  const [descriptionGeneral, setDescriptionGeneral] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [shortName, setShortName] = useState("");
-
+  const [sort, setSort] = useState("");
   useEffect(() => {
     if (mainProgram?.name) {
       setName(mainProgram.name);
@@ -45,6 +47,16 @@ export default function CreateGeneralProgram() {
     if (mainProgram?.shortName) {
       setShortName(mainProgram.shortName);
     }
+    if (mainProgram?.title) {
+      setTitle(mainProgram.title as string);
+    }
+    if (mainProgram?.sort) {
+      const sortData = mainProgram?.sort as number
+      setSort(sortData.toString());
+    }
+    if (mainProgram?.descriptionGeneral) {
+      setDescriptionGeneral(mainProgram?.descriptionGeneral as string);
+    }
   }, [mainProgram]);
 
   const handleSend = (e: FormEvent<HTMLFormElement>) => {
@@ -53,8 +65,11 @@ export default function CreateGeneralProgram() {
 
     const data = {
       name,
+      descriptionGeneral,
+      title,
       description,
       shortName,
+      sort: +sort,
       id: mainProgramId ? +mainProgramId : 1,
     };
 
@@ -68,25 +83,56 @@ export default function CreateGeneralProgram() {
       <Container>
         <form onSubmit={handleSend}>
           <FormControl>
-            <FormLabel my='1rem' htmlFor="name">Назва курсу</FormLabel>
+            <FormLabel my="1rem" htmlFor="name">
+              Назва курсу
+            </FormLabel>
             <InputType
               placeholder="Назва курсу"
               value={name}
               onChange={setName}
             />
-             <FormErrorMessage></FormErrorMessage>
+            <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl my='1rem' >
-            <FormLabel htmlFor="description">Опис курсу</FormLabel>
+          <FormControl my="12px">
+              <FormLabel htmlFor="descriptionGeneral">
+                Опис курсу
+              </FormLabel>
+
+              <InputType
+                type="textarea"
+                height="200px"
+                placeholder="Опис курсу"
+                value={descriptionGeneral}
+                onChange={setDescriptionGeneral}
+              />
+              <FormErrorMessage></FormErrorMessage>
+            </FormControl>
+          <FormControl my="12px">
+            <FormLabel htmlFor="description">Заголовок курсу - Title</FormLabel>
+            <InputType
+              type="textarea"
+              height="100px"
+              placeholder="Заголовок курсу"
+              value={title}
+              onChange={setTitle}
+            />
+            <FormErrorMessage></FormErrorMessage>
+          </FormControl>
+          <FormControl my="1rem">
+            <FormLabel htmlFor="description">
+              Опис курсу - description
+            </FormLabel>
 
             <InputType
+              type="textarea"
+              height="200px"
               placeholder="Опис курсу"
               value={description}
               onChange={setDescription}
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <FormControl my='1rem' >
+          <FormControl my="1rem">
             <FormLabel htmlFor="shortName">Коротке імя курсу</FormLabel>
             <InputType
               placeholder="Коротке імя курсу"
@@ -95,7 +141,17 @@ export default function CreateGeneralProgram() {
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>
-          <Button mt={4} variant={'main'} type="submit">
+          <FormControl my="1rem">
+            <FormLabel htmlFor="shortName">Порядок сортування</FormLabel>
+            <InputType
+              placeholder="Порядок сортування"
+              type="number"
+              value={sort}
+              onChange={setSort}
+            />
+            <FormErrorMessage></FormErrorMessage>
+          </FormControl>
+          <Button mt={4} variant={"main"} type="submit">
             Зберегти
           </Button>
         </form>

@@ -23,31 +23,36 @@ export default function CreateGeneralProgram() {
   });
   //chose name
   const [name, setName] = useState("");
+  const [descriptionGeneral, setDescriptionGeneral] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [shortName, setShortName] = useState("");
-
+  const [sort, setSort] = useState("");
   const handleSend = (e: FormEvent<HTMLFormElement>) => {
     e.stopPropagation();
     e.preventDefault();
 
     const data = {
       name,
+      descriptionGeneral,
+      title,
       description,
       shortName,
+      sort: +sort,
     };
     mutate(data);
     setName("");
     setDescription("");
     setShortName("");
+    setTitle("");
+    setSort("");
+    setDescriptionGeneral('')
   };
 
   const session = useSession();
   const router = useRouter();
   useEffect(() => {
-    if (
-      session.status !== "loading" &&
-      session?.data?.user?.role !== 1
-    ) {
+    if (session.status !== "loading" && session?.data?.user?.role !== 1) {
       void router.push("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,6 +73,20 @@ export default function CreateGeneralProgram() {
               <FormErrorMessage></FormErrorMessage>
             </FormControl>
             <FormControl my="12px">
+              <FormLabel htmlFor="descriptionGeneral">
+                Опис курсу
+              </FormLabel>
+
+              <InputType
+                type="textarea"
+                height="200px"
+                placeholder="Опис курсу"
+                value={descriptionGeneral}
+                onChange={setDescriptionGeneral}
+              />
+              <FormErrorMessage></FormErrorMessage>
+            </FormControl>
+            <FormControl my="12px">
               <FormLabel htmlFor="shortName">Коротке імя курсу</FormLabel>
               <InputType
                 placeholder="Коротке імя курсу"
@@ -77,7 +96,23 @@ export default function CreateGeneralProgram() {
               <FormErrorMessage></FormErrorMessage>
             </FormControl>
             <FormControl my="12px">
-              <FormLabel htmlFor="description">Опис курсу</FormLabel>
+              <FormLabel htmlFor="description">
+                Заголовок курсу - Title
+              </FormLabel>
+
+              <InputType
+                type="textarea"
+                height="100px"
+                placeholder="Заголовок курсу"
+                value={title}
+                onChange={setTitle}
+              />
+              <FormErrorMessage></FormErrorMessage>
+            </FormControl>
+            <FormControl my="12px">
+              <FormLabel htmlFor="description">
+                Опис курсу - description
+              </FormLabel>
 
               <InputType
                 type="textarea"
@@ -88,7 +123,16 @@ export default function CreateGeneralProgram() {
               />
               <FormErrorMessage></FormErrorMessage>
             </FormControl>
-
+            <FormControl my="1rem">
+              <FormLabel htmlFor="shortName">Порядок сортування</FormLabel>
+              <InputType
+                placeholder="Порядок сортування"
+                type="number"
+                value={sort}
+                onChange={setSort}
+              />
+              <FormErrorMessage></FormErrorMessage>
+            </FormControl>
             <Button mt={4} variant={"main"} type="submit">
               Створити
             </Button>

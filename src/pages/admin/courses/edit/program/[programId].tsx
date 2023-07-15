@@ -27,7 +27,7 @@ export default function CreateProgram() {
       }
     },
   });
-  const { mutate: mutateLesson  } = api.program.deleteConnectLesson.useMutation({
+  const { mutate: mutateLesson } = api.program.deleteConnectLesson.useMutation({
     onSuccess: (err) => {
       if (!err) {
         console.log("Todo completed 🎉");
@@ -47,15 +47,16 @@ export default function CreateProgram() {
   //chose tags multiple
   const [choseOption, setChoseOption] = useState<MultiValue<LessonOption>>([]);
   const handleChoseOption = (e: MultiValue<LessonOption>) => {
-    const findOption = choseOption.find(option=>!e.includes(option))
-    if(findOption){
-      mutateLesson({ id: +programId, lessonId: +findOption.value} )
+    const findOption = choseOption.find((option) => !e.includes(option));
+    if (findOption) {
+      mutateLesson({ id: +programId, lessonId: +findOption.value });
     }
-    debugger
+    debugger;
     setChoseOption(e);
   };
   //chose name
   const [name, setName] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [generalProgram, setGeneralProgram] = useState("");
   const [order, setOrder] = useState("");
@@ -83,6 +84,9 @@ export default function CreateProgram() {
       const orderProgram = program.order ? program.order : (1 as number);
       setOrder(orderProgram.toString());
     }
+    if (program?.title) {
+      setTitle(program?.title as string);
+    }
   }, [program]);
 
   //send data
@@ -96,6 +100,7 @@ export default function CreateProgram() {
       id: programId ? +programId : 1,
       generalProgramId: +generalProgram,
       name,
+      title,
       description,
       coursesPages: choseValue,
       order: order ? +order : 1,
@@ -108,9 +113,23 @@ export default function CreateProgram() {
       <Container>
         <form onSubmit={onSubmit}>
           <Text my="1rem">Назва програми:</Text>
-          <InputType placeholder="Назва програми" value={name} onChange={setName} />
-          <Text my="1rem">Опис програми</Text>
           <InputType
+            placeholder="Назва програми"
+            value={name}
+            onChange={setName}
+          />
+          <Text my="8px">Заголовок програми - Title:</Text>
+          <InputType
+            type="textarea"
+            height="100px"
+            placeholder="Заголовок програми"
+            value={title}
+            onChange={setTitle}
+          />
+          <Text my="1rem">Опис програми Description</Text>
+          <InputType
+          type="textarea"
+          height="200px"
             placeholder="Опис програми"
             value={description}
             onChange={setDescription}
@@ -138,7 +157,11 @@ export default function CreateProgram() {
           >
             {mainProgram.data &&
               mainProgram.data.map((program) => (
-                <option key={program.id} value={program.id}  style={{background: "#000"}}>
+                <option
+                  key={program.id}
+                  value={program.id}
+                  style={{ background: "#000" }}
+                >
                   {program.name}
                 </option>
               ))}
@@ -150,7 +173,7 @@ export default function CreateProgram() {
             value={order}
             onChange={setOrder}
           />
-          <Button variant={'main'} mt={4} colorScheme="teal" type="submit">
+          <Button variant={"main"} mt={4} colorScheme="teal" type="submit">
             Зберегти
           </Button>
         </form>

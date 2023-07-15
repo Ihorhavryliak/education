@@ -31,7 +31,9 @@ export default function CreateCurse() {
 
   const [name, setName] = useState("");
   const [video, setVideo] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [descriptionCurse, setDescriptionCurse] = useState("");
   const [shortName, setShortName] = useState("");
   const [sort, setSort] = useState("");
   const [theory, setTheory] = useState("");
@@ -46,8 +48,8 @@ export default function CreateCurse() {
     if (lessonData?.video) {
       setVideo(lessonData?.video);
     }
-    if (lessonData?.description) {
-      setDescription(lessonData?.description);
+    if (lessonData?.descriptionCurse) {
+      setDescriptionCurse(lessonData?.descriptionCurse);
     }
     if (lessonData?.img) {
       setShortName(lessonData?.img);
@@ -61,6 +63,12 @@ export default function CreateCurse() {
     if (lessonData?.sort) {
       setSort(lessonData?.sort.toString());
     }
+    if (lessonData?.title) {
+      setTitle(lessonData?.title);
+    }
+    if (lessonData?.description) {
+      setDescription(lessonData?.description);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lessonData]);
 
@@ -70,12 +78,14 @@ export default function CreateCurse() {
 
     const data = {
       name,
-      descriptionCurse: description,
+      descriptionCurse,
       video,
       img: shortName,
       id: curseId ? +curseId : 1,
       sort: +sort,
       theory: theory,
+      title,
+      description,
     };
     mutate(data);
   };
@@ -100,9 +110,35 @@ export default function CreateCurse() {
               height="200px"
               type="textarea"
               size="lg"
+              value={descriptionCurse}
+              onChange={setDescriptionCurse}
+              placeholder="Опис уроку"
+            />
+            <FormErrorMessage></FormErrorMessage>
+          </FormControl>
+          <FormControl mt="8px">
+            <FormLabel htmlFor="descriptionCurse">
+              Заголовок уроку - Title
+            </FormLabel>
+            <InputType
+              type="textarea"
+              height="100px"
+              value={title}
+              onChange={setTitle}
+              placeholder="Заголовок уроку Title"
+            />
+            <FormErrorMessage></FormErrorMessage>
+          </FormControl>
+          <FormControl mt="8px">
+            <FormLabel htmlFor="descriptionCurse">
+              Опис уроку - Description
+            </FormLabel>
+            <InputType
+              type="textarea"
+              height="200px"
               value={description}
               onChange={setDescription}
-              placeholder="Опис уроку"
+              placeholder="Опис уроку - Description"
             />
             <FormErrorMessage></FormErrorMessage>
           </FormControl>

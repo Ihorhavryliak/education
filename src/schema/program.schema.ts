@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const ProgramSchema = z.object({
   name: z.string(),
+  title: z.string(),
   description: z.string(),
   generalProgramId: z.number(),
   coursesPages: z.array(

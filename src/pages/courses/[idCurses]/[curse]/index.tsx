@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 
 import { useSession } from "next-auth/react";
+import Head from "next/head";
 
 import { useRouter } from "next/router";
 
@@ -184,290 +185,296 @@ export default function Curse() {
   }, [session]);
 
   return (
-    <Layout>
-      {(isLoadingTask || isLoadingCourse || isLoadingComplete) &&
-      numberLoading === 0 ? (
-        <Loader />
-      ) : (
-        <>
-          {data && (
-            <Box>
-              <Flex justifyContent={"space-between"} alignItems={"center"}>
-                <Heading as="h1">
-                  <ArrowBack />
-                  <Box ms="8px" as="span">
-                    {data.name}
+    <>
+      <Head>
+        <title>{data?.title}</title>
+        <meta name="description" content={data?.description as string} />
+      </Head>
+      <Layout>
+        {(isLoadingTask || isLoadingCourse || isLoadingComplete) &&
+        numberLoading === 0 ? (
+          <Loader />
+        ) : (
+          <>
+            {data && (
+              <Box>
+                <Flex justifyContent={"space-between"} alignItems={"center"}>
+                  <Heading as="h1">
+                    <ArrowBack />
+                    <Box ms="8px" as="span">
+                      {data.name}
+                    </Box>
+                  </Heading>
+                  <Box>
+                    <CompleteIcon
+                      color="primary.100"
+                      data={competesId?.completeProgramId}
+                      size={10}
+                    />
                   </Box>
-                </Heading>
-                <Box>
-                  <CompleteIcon
-                    color="primary.100"
-                    data={competesId?.completeProgramId}
-                    size={10}
-                  />
-                </Box>
-              </Flex>
-              {data.video && (
-                <Box mt="3rem" maxHeight={"600px"} height="100%">
-                  <iframe
-                    allowFullScreen={true}
-                    width="100%"
-                    height="360"
-                    src={`https://www.youtube.com/embed/${data.video}`}
-                  ></iframe>
-                </Box>
-              )}
-              <Box mt="2rem">
-                <Flex justifyContent={"space-between"} alignItems={"center"}>
-                  <Heading as="h5">Теорія</Heading>
                 </Flex>
-                <Box
-                  mt="1rem"
-                  dangerouslySetInnerHTML={{ __html: data.theory as string }}
-                />
-                <Box textAlign={"right"}>
-                  <Button
+                {data.video && (
+                  <Box mt="3rem" maxHeight={"600px"} height="100%">
+                    <iframe
+                      allowFullScreen={true}
+                      width="100%"
+                      height="360"
+                      src={`https://www.youtube.com/embed/${data.video}`}
+                    ></iframe>
+                  </Box>
+                )}
+                <Box mt="2rem">
+                  <Flex justifyContent={"space-between"} alignItems={"center"}>
+                    <Heading as="h5">Теорія</Heading>
+                  </Flex>
+                  <Box
                     mt="1rem"
-                    variant={"load"}
-                    onClick={() => handleCompleteTheory(data?.id)}
-                    isLoading={isLoading && numberLoading === 1}
-                    isDisabled={competesId?.theoryId ? true : false}
-                    leftIcon={<CompleteIcon data={competesId?.theoryId} />}
-                  >
-                    З теорією ознайомився
-                  </Button>
+                    dangerouslySetInnerHTML={{ __html: data.theory as string }}
+                  />
+                  <Box textAlign={"right"}>
+                    <Button
+                      mt="1rem"
+                      variant={"load"}
+                      onClick={() => handleCompleteTheory(data?.id)}
+                      isLoading={isLoading && numberLoading === 1}
+                      isDisabled={competesId?.theoryId ? true : false}
+                      leftIcon={<CompleteIcon data={competesId?.theoryId} />}
+                    >
+                      З теорією ознайомився
+                    </Button>
+                  </Box>
                 </Box>
-              </Box>
 
-              <Box mt="2rem">
-                <Flex justifyContent={"space-between"} alignItems={"center"}>
-                  <Heading as="h5">Завдання</Heading>
-                </Flex>
-                <Accordion mt="1rem" defaultIndex={[]} allowMultiple>
-                  {data?.task &&
-                    data.task.map((task, index) => {
+                <Box mt="2rem">
+                  <Flex justifyContent={"space-between"} alignItems={"center"}>
+                    <Heading as="h5">Завдання</Heading>
+                  </Flex>
+                  <Accordion mt="1rem" defaultIndex={[]} allowMultiple>
+                    {data?.task &&
+                      data.task.map((task, index) => {
+                        return (
+                          <AccordionItem key={task.id}>
+                            <h2>
+                              <AccordionButton my="1rem">
+                                <Box as="span" flex="1" textAlign="left">
+                                  <Box as="span">{index + 1}.</Box> {task.name}
+                                </Box>
+                                <AccordionIcon />
+                              </AccordionButton>
+                            </h2>
+                            <AccordionPanel>
+                              {task?.video && (
+                                <Box>
+                                  <iframe
+                                    width="100%"
+                                    height="315"
+                                    allowFullScreen={true}
+                                    src={`https://www.youtube.com/embed/${task?.video}`}
+                                    title="YouTube video player"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                  ></iframe>{" "}
+                                </Box>
+                              )}
+                              <Box>Опис завдання:</Box>
+                              {task.description && (
+                                <Box my="1rem" bg="primary.400" p="1rem">
+                                  <Box
+                                    dangerouslySetInnerHTML={{
+                                      __html: task.description,
+                                    }}
+                                  />
+                                </Box>
+                              )}
+
+                              <Text mt={"1rem"} mb={"0.5rem"}>
+                                Моє рішення завдання:
+                              </Text>
+                              {!task.solution ||
+                                (task?.solution.length > 0 && (
+                                  <>
+                                    <Box bg="primary.400" p="1rem">
+                                      {task.solution}
+                                    </Box>
+                                    {task.solution && (
+                                      <Box textAlign={"right"}>
+                                        <Text
+                                          mt="1rem"
+                                          cursor={"pointer"}
+                                          _hover={{ color: "primary.100" }}
+                                          onClick={() => handleEdit(task.id)}
+                                        >
+                                          Редагувати рішення
+                                        </Text>
+                                      </Box>
+                                    )}
+                                  </>
+                                ))}
+
+                              {!task.solution && (
+                                <Box mt="1rem">
+                                  <InputType
+                                    height={"250px"}
+                                    size="lg"
+                                    type="textarea"
+                                    onChange={(e) =>
+                                      handleSolutionOnChange(e, task.id)
+                                    }
+                                    value={
+                                      solution.find((sol) => sol.id === task.id)
+                                        ?.value as string
+                                    }
+                                  />
+                                  <Box color={"red.800"}>
+                                    {
+                                      solutionErr.find(
+                                        (sol) => sol.id === task.id
+                                      )?.error
+                                    }
+                                  </Box>
+                                </Box>
+                              )}
+                              {edit === task.id && (
+                                <Box mt="1rem">
+                                  <InputType
+                                    height={"250px"}
+                                    size="lg"
+                                    type="textarea"
+                                    onChange={(e) =>
+                                      handleSolutionOnChange(e, task.id)
+                                    }
+                                    value={
+                                      solution.find((sol) => sol.id === task.id)
+                                        ?.value as string
+                                    }
+                                  />
+
+                                  <Box color={"red.800"}>
+                                    {
+                                      solutionErr.find(
+                                        (sol) => sol.id === task.id
+                                      )?.error
+                                    }
+                                  </Box>
+                                </Box>
+                              )}
+                              {(edit === task.id || !task.solution) && (
+                                <Box textAlign={"right"} mt="1rem">
+                                  <Button
+                                    isLoading={
+                                      (isLoadingTask ||
+                                        isLoadingCourse ||
+                                        isLoadingComplete) &&
+                                      numberLoading === 4
+                                    }
+                                    my="1rem"
+                                    variant={"load"}
+                                    onClick={() => handleSolution(task.id)}
+                                  >
+                                    Зберегти рішення
+                                  </Button>
+                                </Box>
+                              )}
+                              <AccordionItem mt="2rem">
+                                {(task?.videoSolution ||
+                                  task?.lessonSolution) && (
+                                  <AccordionButton>
+                                    <Box as="span" me={"8px"}>
+                                      <UnlockIcon boxSize={3} />{" "}
+                                    </Box>{" "}
+                                    Показати рішення
+                                    <AccordionIcon />
+                                  </AccordionButton>
+                                )}
+                                <AccordionPanel>
+                                  {task?.videoSolution && (
+                                    <iframe
+                                      width="100%"
+                                      height="315"
+                                      allowFullScreen={true}
+                                      src={`https://www.youtube.com/embed/${task?.videoSolution}`}
+                                      title="YouTube video player"
+                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    ></iframe>
+                                  )}
+                                  {task?.lessonSolution && (
+                                    <Box mt="0.5rem" bg="primary.400">
+                                      {task?.lessonSolution}
+                                    </Box>
+                                  )}
+                                </AccordionPanel>
+                              </AccordionItem>
+                            </AccordionPanel>
+                          </AccordionItem>
+                        );
+                      })}
+                  </Accordion>
+                  <Box textAlign={"right"} mt="1rem">
+                    <Button
+                      isDisabled={competesId?.taskId ? true : false}
+                      mt="1rem"
+                      variant={"load"}
+                      onClick={() =>
+                        handleCompleteTask(data?.task[0]?.id as number)
+                      }
+                      isLoading={isLoading && numberLoading === 2}
+                      leftIcon={<CompleteIcon data={competesId?.taskId} />}
+                    >
+                      Виконано
+                    </Button>
+                  </Box>
+                </Box>
+
+                <Box mt="2rem">
+                  <Flex justifyContent={"space-between"} alignItems={"center"}>
+                    <Heading as="h5" mb="1rem">
+                      Питання для співбесіди
+                    </Heading>
+                  </Flex>
+                  <Accordion defaultIndex={[]} allowMultiple>
+                    {data.question.map((question, index) => {
                       return (
-                        <AccordionItem key={task.id}>
+                        <AccordionItem key={question.id}>
                           <h2>
-                            <AccordionButton my="1rem">
+                            <AccordionButton>
                               <Box as="span" flex="1" textAlign="left">
-                                <Box as="span">{index + 1}.</Box> {task.name}
+                                {index + 1}. {question.name}
                               </Box>
                               <AccordionIcon />
                             </AccordionButton>
                           </h2>
                           <AccordionPanel>
-                            {task?.video && (
-                              <Box>
-                                <iframe
-                                  width="100%"
-                                  height="315"
-                                  allowFullScreen={true}
-                                  src={`https://www.youtube.com/embed/${task?.video}`}
-                                  title="YouTube video player"
-                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                ></iframe>{" "}
-                              </Box>
-                            )}
-                            <Box>Опис завдання:</Box>
-                            {task.description && (
-                              <Box my="1rem" bg="primary.400" p="1rem">
-                                <Box
-                                  dangerouslySetInnerHTML={{
-                                    __html: task.description,
-                                  }}
-                                />
-                              </Box>
-                            )}
-
-                            <Text mt={"1rem"} mb={"0.5rem"}>
-                              Моє рішення завдання:
-                            </Text>
-                            {!task.solution ||
-                              (task?.solution.length > 0 && (
-                                <>
-                                  <Box bg="primary.400" p="1rem">
-                                    {task.solution}
-                                  </Box>
-                                  {task.solution && (
-                                    <Box textAlign={"right"}>
-                                      <Text
-                                        mt="1rem"
-                                        cursor={"pointer"}
-                                        _hover={{ color: "primary.100" }}
-                                        onClick={() => handleEdit(task.id)}
-                                      >
-                                        Редагувати рішення
-                                      </Text>
-                                    </Box>
-                                  )}
-                                </>
-                              ))}
-
-                            {!task.solution && (
-                              <Box mt="1rem">
-                                <InputType
-                                  height={"250px"}
-                                  size="lg"
-                                  type="textarea"
-                                  onChange={(e) =>
-                                    handleSolutionOnChange(e, task.id)
-                                  }
-                                  value={
-                                    solution.find((sol) => sol.id === task.id)
-                                      ?.value as string
-                                  }
-                                />
-                                <Box color={"red.800"}>
-                                  {
-                                    solutionErr.find(
-                                      (sol) => sol.id === task.id
-                                    )?.error
-                                  }
-                                </Box>
-                              </Box>
-                            )}
-                            {edit === task.id && (
-                              <Box mt="1rem">
-                                <InputType
-                                  height={"250px"}
-                                  size="lg"
-                                  type="textarea"
-                                  onChange={(e) =>
-                                    handleSolutionOnChange(e, task.id)
-                                  }
-                                  value={
-                                    solution.find((sol) => sol.id === task.id)
-                                      ?.value as string
-                                  }
-                                />
-
-                                <Box color={"red.800"}>
-                                  {
-                                    solutionErr.find(
-                                      (sol) => sol.id === task.id
-                                    )?.error
-                                  }
-                                </Box>
-                              </Box>
-                            )}
-                            {(edit === task.id || !task.solution) && (
-                              <Box textAlign={"right"} mt="1rem">
-                                <Button
-                                  isLoading={
-                                    (isLoadingTask ||
-                                      isLoadingCourse ||
-                                      isLoadingComplete) &&
-                                    numberLoading === 4
-                                  }
-                                  my="1rem"
-                                  variant={"load"}
-                                  onClick={() => handleSolution(task.id)}
-                                >
-                                  Зберегти рішення
-                                </Button>
-                              </Box>
-                            )}
-                            <AccordionItem mt="2rem">
-                              {(task?.videoSolution ||
-                                task?.lessonSolution) && (
-                                <AccordionButton>
-                                  <Box as="span" me={"8px"}>
-                                    <UnlockIcon boxSize={3} />{" "}
-                                  </Box>{" "}
-                                  Показати рішення
-                                  <AccordionIcon />
-                                </AccordionButton>
-                              )}
-                              <AccordionPanel>
-                                {task?.videoSolution && (
-                                  <iframe
-                                    width="100%"
-                                    height="315"
-                                    allowFullScreen={true}
-                                    src={`https://www.youtube.com/embed/${task?.videoSolution}`}
-                                    title="YouTube video player"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                  ></iframe>
-                                )}
-                                {task?.lessonSolution && (
-                                  <Box mt="0.5rem" bg="primary.400">
-                                    {task?.lessonSolution}
-                                  </Box>
-                                )}
-                              </AccordionPanel>
-                            </AccordionItem>
+                            <Box bg={"primary.200"} p="1rem" mt="1rem">
+                              <Box
+                                dangerouslySetInnerHTML={{
+                                  __html: question.answer,
+                                }}
+                              />
+                            </Box>
                           </AccordionPanel>
                         </AccordionItem>
                       );
                     })}
-                </Accordion>
-                <Box textAlign={"right"} mt="1rem">
-                  <Button
-                    isDisabled={competesId?.taskId ? true : false}
-                    mt="1rem"
-                    variant={"load"}
-                    onClick={() =>
-                      handleCompleteTask(data?.task[0]?.id as number)
-                    }
-                    isLoading={isLoading && numberLoading === 2}
-                    leftIcon={<CompleteIcon data={competesId?.taskId} />}
-                  >
-                    Виконано
-                  </Button>
+                  </Accordion>
+                  <Box textAlign={"right"} mt="1rem">
+                    <Button
+                      mt="1rem"
+                      variant={"load"}
+                      isDisabled={competesId?.questionId ? true : false}
+                      onClick={() =>
+                        handleCompleteQuestion(data?.question[0]?.id as number)
+                      }
+                      isLoading={isLoading && numberLoading === 3}
+                      leftIcon={<CompleteIcon data={competesId?.questionId} />}
+                    >
+                      Виконано
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
-
-              <Box mt="2rem">
-                <Flex justifyContent={"space-between"} alignItems={"center"}>
-                  <Heading as="h5" mb="1rem">
-                    Питання для співбесіди
-                  </Heading>
-                </Flex>
-                <Accordion defaultIndex={[]} allowMultiple>
-                  {data.question.map((question, index) => {
-                    return (
-                      <AccordionItem key={question.id}>
-                        <h2>
-                          <AccordionButton>
-                            <Box as="span" flex="1" textAlign="left">
-                              {index + 1}. {question.name}
-                            </Box>
-                            <AccordionIcon />
-                          </AccordionButton>
-                        </h2>
-                        <AccordionPanel>
-                          <Box bg={"primary.200"} p="1rem" mt="1rem">
-                            <Box
-                              dangerouslySetInnerHTML={{
-                                __html: question.answer,
-                              }}
-                            />
-                          </Box>
-                        </AccordionPanel>
-                      </AccordionItem>
-                    );
-                  })}
-                </Accordion>
-                <Box textAlign={"right"} mt="1rem">
-                  <Button
-                    mt="1rem"
-                    variant={"load"}
-                    isDisabled={competesId?.questionId ? true : false}
-                    onClick={() =>
-                      handleCompleteQuestion(data?.question[0]?.id as number)
-                    }
-                    isLoading={isLoading && numberLoading === 3}
-                    leftIcon={<CompleteIcon data={competesId?.questionId} />}
-                  >
-                    Виконано
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
-          )}
-        </>
-      )}
-    </Layout>
+            )}
+          </>
+        )}
+      </Layout>
+    </>
   );
 }

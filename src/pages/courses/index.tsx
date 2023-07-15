@@ -1,5 +1,6 @@
 import { Link } from "@chakra-ui/next-js";
 import { Box, Card, CardBody, Container, Flex, Text } from "@chakra-ui/react";
+import Head from "next/head";
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
 import { Layout } from "~/components/Layout";
 import Loader from "~/components/Loader/Loader";
@@ -10,6 +11,13 @@ export default function Courses() {
 
   return (
     <>
+      <Head>
+        <title>Безкоштовні курси Front-End, Back-End, Full-Stack - Edupt</title>
+        <meta
+          name="description"
+          content="Дізнайтесь більше про безкоштовні курси з Front-End, Back-End та Full-Stack розробки на Edupt. Розширюйте свої навички програмування та створюйте вражаючі веб-додатки."
+        />
+      </Head>
       <Layout>
         {isLoading ? (
           <Loader />
@@ -23,17 +31,13 @@ export default function Courses() {
         )}
       </Layout>
       <Container bg="darks.200" px={0}>
-        <Flex
-          w="100%"
-          flexWrap={"wrap"}
-          gap="3.63rem" /* justifyContent={'space-between'} */
-        >
+        <Flex w="100%" flexWrap={"wrap"} gap="3rem">
           {data &&
             data.map((curse) => {
               return (
                 <Card key={curse.id}>
                   <CardBody>
-                    <Box maxWidth={"372px"}>
+                    <Box>
                       <Link href={`/courses/${curse.id}`}>
                         <Flex
                           borderRadius={"1rem"}
@@ -69,7 +73,7 @@ export default function Courses() {
                             minHeight={"48px"}
                             noOfLines={2}
                           >
-                            {curse.description}
+                            {curse.descriptionGeneral}
                           </Text>
                         </Text>
                       </Box>

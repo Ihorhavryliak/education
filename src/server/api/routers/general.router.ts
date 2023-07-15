@@ -13,21 +13,31 @@ export const generalProgramRouter = createTRPCRouter({
       return ctx.prisma.generalProgram.create({
         data: {
           name: input.name,
+          descriptionGeneral: input.descriptionGeneral,
+          title: input.title,
           description: input.description,
           shortName: input.shortName,
+          sort: input.sort,
         },
       });
     }),
   all: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.generalProgram.findMany();
+    return await ctx.prisma.generalProgram.findMany({
+      orderBy: {
+        sort: "asc",
+      },
+    });
   }),
   update: protectedAdminProcedure
     .input(
       z.object({
         name: z.string(),
+        descriptionGeneral: z.string(),
+        title: z.string(),
         description: z.string(),
         shortName: z.string(),
         id: z.number(),
+        sort: z.number(),
         //coursesPages: z.string(),
       })
     )
@@ -38,8 +48,11 @@ export const generalProgramRouter = createTRPCRouter({
         },
         data: {
           name: input.name,
+          descriptionGeneral: input.descriptionGeneral,
+          title: input.title,
           description: input.description,
           shortName: input.shortName,
+          sort: input.sort,
         },
       });
     }),

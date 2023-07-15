@@ -6,6 +6,7 @@ import { Layout } from "~/components/Layout";
 import Image from "next/image";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import Loader from "~/components/Loader/Loader";
+import Head from "next/head";
 
 export const metadata = {
   title: "Create Next App",
@@ -17,6 +18,15 @@ const Home: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>
+          Edupt - Платформа з Безкоштовними Курсами для Програмування
+        </title>
+        <meta
+          name="description"
+          content="Edupt - платформа з безкоштовними курсами з Front-End, Back-End та Full-Stack розробки. Навчайтесь програмуванню, розширюйте свої навички та створюйте вражаючі веб-додатки."
+        />
+      </Head>
       <Layout>Головна</Layout>
       {session.status === "loading" ? (
         <Loader />

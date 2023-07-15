@@ -14,32 +14,19 @@ import {
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
 import CircularProgress from "~/components/CircularProgress/CircularProgress";
 import { Layout } from "~/components/Layout";
 import { api } from "~/utils/api";
 import Loader from "~/components/Loader/Loader";
+import Head from "next/head";
 
 export default function CursePage() {
   const router = useRouter();
   const pathname = usePathname();
   const session = useSession();
   const userId = session?.data?.user?.id as number;
-
-  const { mutate, isLoading } = api.complete.create.useMutation({
-    onSuccess: () => {
-      //update data
-    },
-    onError: (e) => {
-      const errorMessage = e.data?.zodError?.fieldErrors.content;
-      if (errorMessage && errorMessage[0]) {
-        console.log(errorMessage[0]);
-      } else {
-        console.log("Failed! Please try again later.");
-      }
-    },
-  });
 
   const { data, isLoading: isLoadingProgram } = api.program.all.useQuery({
     id: router.query.idCurses ? (router.query.idCurses as string) : "",
@@ -55,51 +42,48 @@ export default function CursePage() {
   const handleToPage = async (pageId: number) => {
     const isInCompetes = competesId?.find((ids) => ids.programId === pageId);
     if (!isInCompetes) {
-      mutate({ userId: userId, pageId });
       await router.push(`${pathname}/${pageId}`);
     } else {
       await router.push(`${pathname}/${pageId}`);
     }
   };
 
-  useEffect(() => {
-    if (!(session.status === "loading") && !session?.data) {
-      void router.push("/login");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session]);
-
   return (
     <>
+      <Head>
+        <title>{data?.mainProgram?.title}</title>
+        <meta
+          name="description"
+          content={data?.mainProgram?.description}
+        />
+      </Head>
       <Layout>
-        {isLoading || isLoadingProgram || isLoadingComplete ? (
+        {isLoadingProgram || (userId && isLoadingComplete) ? (
           <Loader />
         ) : (
           <>
-            {session?.data && (
-              <>
-                <Heading as="h2" mb="1.5rem">
-                  <ArrowBack /> {data && data.mainProgram?.name}
-                </Heading>
+            <>
+              <Heading as="h2" mb="1.5rem">
+                <ArrowBack /> {data && data.mainProgram?.name}
+              </Heading>
 
-                <Heading
-                  as="h3"
-                  fontSize={"1.875rem"}
-                  borderRadius={"0.5rem"}
-                  border="1px"
-                  borderColor="grays.300"
-                  padding={"1rem"}
-                  //bg="grays.900"
-                >
-                  Навчальний план
-                </Heading>
-              </>
-            )}
+              <Heading
+                as="h3"
+                fontSize={"1.875rem"}
+                borderRadius={"0.5rem"}
+                border="1px"
+                borderColor="grays.300"
+                padding={"1rem"}
+                //bg="grays.900"
+              >
+                Навчальний план
+              </Heading>
+            </>
           </>
         )}
       </Layout>
-      {isLoading || isLoadingProgram || isLoadingComplete ? (
-        <Loader />
+      {isLoadingProgram || (userId && isLoadingComplete) ? (
+        <></>
       ) : (
         <>
           {data &&
@@ -120,31 +104,33 @@ export default function CursePage() {
                   mt={"3rem"}
                 >
                   <Box>
-      
                     <Accordion defaultIndex={[0]} allowMultiple>
                       <AccordionItem border={0}>
                         <h2>
-                          <AccordionButton my="1rem" _hover={{ bg: "none" }} bg='darks.300'>
+                          <AccordionButton
+                            my="1rem"
+                            _hover={{ bg: "none" }}
+                            bg="darks.300"
+                          >
                             <Text mr={"1rem"}>
                               <CircularProgress
                                 size={50}
                                 strokeWidth={2}
                                 percentage={
-                                  mainCur && mainCur?.coursesPages.length > 0 ?
-                                  Math.round(
-                                    (mainCur?.coursesPages?.filter(
-                                      (cursePage) =>
-                                        competesId?.some(
-                                          (compete) =>
-                                            compete.completeProgramId ===
-                                            cursePage.id
-                                        )
-                                    ).length /
-                                      mainCur?.coursesPages.length) *
-                                      100
-                                  )
-                                  :
-                                  0
+                                  mainCur && mainCur?.coursesPages.length > 0
+                                    ? Math.round(
+                                        (mainCur?.coursesPages?.filter(
+                                          (cursePage) =>
+                                            competesId?.some(
+                                              (compete) =>
+                                                compete.completeProgramId ===
+                                                cursePage.id
+                                            )
+                                        ).length /
+                                          mainCur?.coursesPages.length) *
+                                          100
+                                      )
+                                    : 0
                                 }
                                 color={
                                   mainCur &&

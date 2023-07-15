@@ -22,7 +22,7 @@ export default function CreateCurse() {
       } else {
         setName("");
         setVideo("");
-        setDescription("");
+        setDescriptionCurse("");
         setShortName("");
         setTheory("");
         setSort("");
@@ -32,7 +32,9 @@ export default function CreateCurse() {
   //chose name
   const [name, setName] = useState("");
   const [video, setVideo] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [descriptionCurse, setDescriptionCurse] = useState("");
   const [shortName, setShortName] = useState("");
 
   const [theory, setTheory] = useState("");
@@ -44,7 +46,9 @@ export default function CreateCurse() {
 
     const data = {
       name,
-      descriptionCurse: description,
+      title,
+      description,
+      descriptionCurse,
       video,
       img: shortName,
       sort: +sort,
@@ -91,9 +95,35 @@ export default function CreateCurse() {
               <InputType
                 type="textarea"
                 height="200px"
+                value={descriptionCurse}
+                onChange={setDescriptionCurse}
+                placeholder="Опис уроку"
+              />
+              <FormErrorMessage></FormErrorMessage>
+            </FormControl>
+            <FormControl mt="8px">
+              <FormLabel htmlFor="descriptionCurse">
+                Заголовок уроку - Title
+              </FormLabel>
+              <InputType
+                type="textarea"
+                height="100px"
+                value={title}
+                onChange={setTitle}
+                placeholder="Заголовок уроку Title"
+              />
+              <FormErrorMessage></FormErrorMessage>
+            </FormControl>
+            <FormControl mt="8px">
+              <FormLabel htmlFor="descriptionCurse">
+                Опис уроку - Description
+              </FormLabel>
+              <InputType
+                type="textarea"
+                height="200px"
                 value={description}
                 onChange={setDescription}
-                placeholder="Опис уроку"
+                placeholder="Опис уроку - Description"
               />
               <FormErrorMessage></FormErrorMessage>
             </FormControl>
@@ -128,7 +158,7 @@ export default function CreateCurse() {
             </FormControl>
 
             <Box textAlign={"right"}>
-              <Button  mt={4} variant={'main'} type="submit">
+              <Button mt={4} variant={"main"} type="submit">
                 Створити
               </Button>
             </Box>

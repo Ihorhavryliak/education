@@ -37,6 +37,7 @@ export default function CreateProgram() {
   };
   //chose name
   const [name, setName] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [generalProgram, setGeneralProgram] = useState("");
   const handleGeneralProgram = (text: string) => {
@@ -53,6 +54,7 @@ export default function CreateProgram() {
     const data = {
       generalProgramId: +generalProgram,
       name,
+      title,
       description,
       coursesPages: choseValue,
     };
@@ -62,14 +64,12 @@ export default function CreateProgram() {
     setName("");
     setDescription("");
     setGeneralProgram("");
+    setTitle("");
   };
   const session = useSession();
   const router = useRouter();
   useEffect(() => {
-    if (
-      session.status !== "loading" &&
-      session?.data?.user?.role !== 1
-    ) {
+    if (session.status !== "loading" && session?.data?.user?.role !== 1) {
       void router.push("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,7 +87,15 @@ export default function CreateProgram() {
               value={name}
               onChange={setName}
             />
-            <Text my="8px">Опис програми:</Text>
+            <Text my="8px">Заголовок програми - Title:</Text>
+            <InputType
+              type="textarea"
+              height="100px"
+              placeholder="Заголовок програми"
+              value={title}
+              onChange={setTitle}
+            />
+            <Text my="8px">Опис програми Description:</Text>
             <InputType
               type="textarea"
               height="200px"
@@ -118,7 +126,11 @@ export default function CreateProgram() {
             >
               {mainProgram.data &&
                 mainProgram.data.map((program) => (
-                  <option key={program.id}  style={{background: "#000"}} value={program.id}>
+                  <option
+                    key={program.id}
+                    style={{ background: "#000" }}
+                    value={program.id}
+                  >
                     {program.name}
                   </option>
                 ))}

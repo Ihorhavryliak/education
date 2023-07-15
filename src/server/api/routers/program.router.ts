@@ -4,6 +4,7 @@ import {
   createTRPCRouter,
   protectedAdminProcedure,
   protectedProcedure,
+  publicProcedure,
 } from "~/server/api/trpc";
 
 export const programRouter = createTRPCRouter({
@@ -26,6 +27,7 @@ export const programRouter = createTRPCRouter({
       z.object({
         id: z.number(),
         name: z.string(),
+        title: z.string(),
         description: z.string(),
         generalProgramId: z.number(),
         order: z.number(),
@@ -43,6 +45,7 @@ export const programRouter = createTRPCRouter({
         },
         data: {
           name: input.name,
+          title: input.title,
           description: input.description,
           generalProgramId: input.generalProgramId,
           order: input.order,
@@ -52,7 +55,7 @@ export const programRouter = createTRPCRouter({
         },
       });
     }),
-  all: protectedProcedure
+  all: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const program = await ctx.prisma.program.findMany({
@@ -100,6 +103,7 @@ export const programRouter = createTRPCRouter({
         },
         include: {
           coursesPages: true,
+          generalProgram: true
         },
       });
     }),

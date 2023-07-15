@@ -13,6 +13,8 @@ export const courseRouter = createTRPCRouter({
         name: z.string(),
         video: z.string(),
         descriptionCurse: z.string(),
+        title: z.string(),
+        description: z.string(),
         img: z.string(),
         sort: z.number(),
         theory: z.string(),
@@ -27,6 +29,8 @@ export const courseRouter = createTRPCRouter({
           img: input.img,
           sort: input.sort,
           theory: input.theory,
+          title: input.title,
+          description: input.description,
         },
       });
     }),
@@ -40,6 +44,8 @@ export const courseRouter = createTRPCRouter({
         id: z.number(),
         sort: z.number(),
         theory: z.string(),
+        title:  z.string(),
+        description: z.string(),
       })
     )
     .mutation(({ ctx, input }) => {
@@ -54,6 +60,8 @@ export const courseRouter = createTRPCRouter({
           img: input.img,
           sort: input.sort,
           theory: input.theory,
+          title: input.title,
+          description: input.description,
         },
       });
     }),
