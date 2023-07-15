@@ -1,5 +1,6 @@
 import { Button, Select, Text } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import React, { type FormEvent, useState, useEffect } from "react";
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
@@ -8,6 +9,7 @@ import { Layout } from "~/components/Layout";
 import { api } from "~/utils/api";
 
 export default function QuestionCreate() {
+  const pathname = usePathname();
   const { mutate } = api.question.create.useMutation({
     onSuccess: (err) => {
       if (!err) {
@@ -39,10 +41,7 @@ export default function QuestionCreate() {
   const session = useSession();
   const router = useRouter();
   useEffect(() => {
-    if (
-      session.status !== "loading" &&
-      session?.data?.user?.role !== 1
-    ) {
+    if (session.status !== "loading" && session?.data?.user?.role !== 1) {
       void router.push("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,7 +50,7 @@ export default function QuestionCreate() {
   if (session?.data?.user?.role === 1) {
     return (
       <Layout>
-        <ArrowBack />
+        <ArrowBack pathname={pathname} />
         <form onSubmit={onSubmit}>
           <Text my="8px">Назва питання:</Text>
           <InputType
@@ -70,12 +69,16 @@ export default function QuestionCreate() {
           />
           <Text my="8px">Вибрати урок де буде відображатися питання:</Text>
           <Select
-          value={curseId}
+            value={curseId}
             placeholder="Вибрати урок де буде відображатися питання"
             onChange={(e) => setCurseId(e.target.value)}
           >
             {lessons?.map((lesson) => (
-              <option style={{background: "#000"}}  key={lesson.id} value={lesson.id}>
+              <option
+                style={{ background: "#000" }}
+                key={lesson.id}
+                value={lesson.id}
+              >
                 {lesson.name}
               </option>
             ))}
@@ -88,7 +91,7 @@ export default function QuestionCreate() {
             onChange={setQuestionSort}
           />
 
-          <Button mt={4} variant={'main'} type="submit">
+          <Button mt={4} variant={"main"} type="submit">
             Створити
           </Button>
         </form>

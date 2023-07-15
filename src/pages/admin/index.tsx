@@ -6,6 +6,7 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
@@ -15,7 +16,7 @@ import { api } from "~/utils/api";
 export default function Admin() {
   const session = useSession();
   const router = useRouter();
-
+  const pathname = usePathname();
   const { data: generalProgram, refetch: refetchCurses } =
     api.generalProgram.all.useQuery();
   const { data: program, refetch } = api.program.allProgram.useQuery();
@@ -66,7 +67,7 @@ export default function Admin() {
 
   return (
     <Layout>
-      <ArrowBack />
+      <ArrowBack pathname={pathname} />
       {session?.data?.user?.role === 1 && (
         <>
           <Flex gap={"1rem"}>

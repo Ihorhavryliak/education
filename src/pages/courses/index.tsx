@@ -1,6 +1,8 @@
 import { Link } from "@chakra-ui/next-js";
 import { Box, Card, CardBody, Container, Flex, Text } from "@chakra-ui/react";
 import Head from "next/head";
+import { usePathname } from "next/navigation";
+
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
 import { Layout } from "~/components/Layout";
 import Loader from "~/components/Loader/Loader";
@@ -8,6 +10,7 @@ import { api } from "~/utils/api";
 
 export default function Courses() {
   const { data, isLoading } = api.generalProgram.all.useQuery();
+  const pathname = usePathname();
 
   return (
     <>
@@ -24,7 +27,7 @@ export default function Courses() {
         ) : (
           <>
             <Box as="span" fontSize={"16px"} position={"relative"} mr="8px">
-              <ArrowBack />
+              <ArrowBack pathname={pathname} />
             </Box>
             Курси
           </>

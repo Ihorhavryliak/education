@@ -13,8 +13,10 @@ import { Layout } from "~/components/Layout";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
+import { usePathname } from "next/navigation";
 
 export default function CreateCurse() {
+  const pathname = usePathname();
   const { mutate } = api.course.create.useMutation({
     onSuccess: (err) => {
       if (!err) {
@@ -69,7 +71,7 @@ export default function CreateCurse() {
   if (session?.data?.user?.role === 1) {
     return (
       <Layout>
-        <ArrowBack />
+        <ArrowBack pathname={pathname} />
         <Container>
           <form onSubmit={onSubmit}>
             <FormControl mt="8px">

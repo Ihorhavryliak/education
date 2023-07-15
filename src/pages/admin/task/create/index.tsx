@@ -1,5 +1,6 @@
 import { Button, Container, Select, Text } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import React, { type FormEvent, useState, useEffect } from "react";
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
@@ -8,6 +9,7 @@ import { Layout } from "~/components/Layout";
 import { api } from "~/utils/api";
 
 export default function TaskCreate() {
+  const pathname = usePathname();
   const { mutate } = api.task.create.useMutation({
     onSuccess: (err) => {
       if (!err) {
@@ -63,7 +65,7 @@ export default function TaskCreate() {
   if (session?.data?.user?.role === 1) {
     return (
       <Layout>
-        <ArrowBack />
+        <ArrowBack pathname={pathname} />
         <Container>
           <form onSubmit={onSubmit}>
             <Text my="1rem">Назва завдання:</Text>

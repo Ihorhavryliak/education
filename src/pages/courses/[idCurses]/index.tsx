@@ -64,7 +64,7 @@ export default function CursePage() {
           <>
             <>
               <Heading as="h2" mb="1.5rem">
-                <ArrowBack /> {data && data.mainProgram?.name}
+                <ArrowBack pathname={router.pathname} /> {data && data.mainProgram?.name}
               </Heading>
 
               <Heading

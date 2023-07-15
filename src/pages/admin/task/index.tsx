@@ -10,6 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -20,6 +21,7 @@ import { api } from "~/utils/api";
 export default function TaskCreate() {
   const session = useSession();
   const router = useRouter();
+  const pathname = usePathname();
   const ctx = api.useContext();
   const { data: taskData } = api.task.all.useQuery();
   const { mutate } = api.task.delete.useMutation({
@@ -48,7 +50,7 @@ export default function TaskCreate() {
     };
     return (
       <Layout>
-        <ArrowBack />
+        <ArrowBack pathname={pathname} />
         <Container>
           <Box my="25px">
             <Link variant={"button"}  href={"/admin/task/create"}>Створити завдання</Link>

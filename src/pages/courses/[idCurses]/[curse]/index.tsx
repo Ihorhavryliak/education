@@ -14,6 +14,7 @@ import {
 
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { usePathname } from "next/navigation";
 
 import { useRouter } from "next/router";
 
@@ -27,6 +28,7 @@ import { api } from "~/utils/api";
 
 export default function Curse() {
   const router = useRouter();
+  const pathname = usePathname();
   const session = useSession();
   const ctx = api.useContext();
   const userId = session?.data?.user?.id as number;
@@ -200,7 +202,7 @@ export default function Curse() {
               <Box>
                 <Flex justifyContent={"space-between"} alignItems={"center"}>
                   <Heading as="h1">
-                    <ArrowBack />
+                    <ArrowBack pathname={pathname} />
                     <Box ms="8px" as="span">
                       {data.name}
                     </Box>
