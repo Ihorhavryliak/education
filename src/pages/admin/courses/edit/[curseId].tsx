@@ -92,7 +92,7 @@ export default function CreateCurse() {
 
   return (
     <Layout>
-      <ArrowBack />
+      <ArrowBack pathname={'/admin/'} />
       <Container>
         <form onSubmit={onSubmit}>
           <FormControl my="8px">

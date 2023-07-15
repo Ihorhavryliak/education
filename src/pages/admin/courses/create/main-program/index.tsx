@@ -12,10 +12,8 @@ import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
-import { usePathname } from "next/navigation";
 
 export default function CreateGeneralProgram() {
-  const pathname = usePathname();
   const { mutate } = api.generalProgram.create.useMutation({
     onSuccess: (err) => {
       if (!err) {
@@ -62,7 +60,7 @@ export default function CreateGeneralProgram() {
   if (session?.data?.user?.role === 1) {
     return (
       <Layout>
-        <ArrowBack pathname={pathname} />
+        <ArrowBack pathname={'/admin/'} />
         <Container>
           <form onSubmit={handleSend}>
             <FormControl my="12px">

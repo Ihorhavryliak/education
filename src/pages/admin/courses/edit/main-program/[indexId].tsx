@@ -79,7 +79,7 @@ export default function CreateGeneralProgram() {
   };
   return (
     <Layout>
-      <ArrowBack />
+      <ArrowBack pathname={'/admin/'} />
       <Container>
         <form onSubmit={handleSend}>
           <FormControl>

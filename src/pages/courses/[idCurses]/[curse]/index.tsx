@@ -32,7 +32,7 @@ export default function Curse() {
   const session = useSession();
   const ctx = api.useContext();
   const userId = session?.data?.user?.id as number;
-
+  const countText = 600;
   const { mutate, isLoading } = api.complete.updateComplete.useMutation({
     onSuccess: () => {
       //update data
@@ -84,6 +84,14 @@ export default function Curse() {
     );
   const [numberLoading, setNumberLoading] = useState(0);
 
+  const [countShowText, setCountShowText] = useState({
+    count: countText,
+    isActive: false,
+  });
+  const trimmedText =
+    data?.theory && data?.theory?.length > countText
+      ? data?.theory?.substring(0, countShowText.count)
+      : data?.theory || "";
   const [solution, setSolution] = useState([{ id: 0, value: "" }]);
   const [solutionErr, setSolutionErr] = useState([{ id: 0, error: "" }]);
   const handleSolutionOnChange = (val: string, id: number) => {
@@ -186,6 +194,19 @@ export default function Curse() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
+  const handleShowText = () => {
+    if (countShowText.isActive) {
+      setCountShowText({
+        count: countText,
+        isActive: false,
+      });
+    } else {
+      setCountShowText({
+        count: data?.theory?.length as number,
+        isActive: true,
+      });
+    }
+  };
   return (
     <>
       <Head>
@@ -231,8 +252,28 @@ export default function Curse() {
                   </Flex>
                   <Box
                     mt="1rem"
-                    dangerouslySetInnerHTML={{ __html: data.theory as string }}
+                    dangerouslySetInnerHTML={{
+                      __html: `${trimmedText}${
+                        !countShowText.isActive
+                          ? data?.theory && data?.theory?.length > countText
+                            ? "..."
+                            : ""
+                          : ""
+                      }`,
+                    }}
                   />
+                  {data?.theory && data?.theory?.length > countText && (
+                    <Box my="1rem" textAlign={"right"}>
+                      <Box
+                        as="span"
+                        cursor={"pointer"}
+                        _hover={{ color: "primary.100" }}
+                        onClick={() => handleShowText()}
+                      >
+                        {!countShowText.isActive ? "Показати все" : "Сховати"}
+                      </Box>
+                    </Box>
+                  )}
                   <Box textAlign={"right"}>
                     <Button
                       mt="1rem"

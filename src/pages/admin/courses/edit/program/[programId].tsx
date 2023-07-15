@@ -109,7 +109,7 @@ export default function CreateProgram() {
   };
   return (
     <Layout>
-      <ArrowBack />
+      <ArrowBack pathname={"/admin/"} />
       <Container>
         <form onSubmit={onSubmit}>
           <Text my="1rem">Назва програми:</Text>
@@ -128,8 +128,8 @@ export default function CreateProgram() {
           />
           <Text my="1rem">Опис програми Description</Text>
           <InputType
-          type="textarea"
-          height="200px"
+            type="textarea"
+            height="200px"
             placeholder="Опис програми"
             value={description}
             onChange={setDescription}

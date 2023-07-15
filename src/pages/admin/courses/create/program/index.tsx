@@ -12,7 +12,6 @@ import { Layout } from "~/components/Layout";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
-import { usePathname } from "next/navigation";
 
 interface ColorOption {
   label: string;
@@ -20,7 +19,6 @@ interface ColorOption {
 }
 
 export default function CreateProgram() {
-  const pathname = usePathname();
   const idUse = useId();
   const { mutate } = api.program.create.useMutation({
     onSuccess: (err) => {
@@ -80,7 +78,7 @@ export default function CreateProgram() {
   if (session?.data?.user?.role === 1) {
     return (
       <Layout>
-        <ArrowBack pathname={pathname} />
+        <ArrowBack pathname={'/admin/'} />
         <Container>
           <form onSubmit={onSubmit}>
             <Text my="8px">Назва програми:</Text>
