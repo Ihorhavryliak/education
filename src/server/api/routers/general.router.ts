@@ -21,13 +21,39 @@ export const generalProgramRouter = createTRPCRouter({
         },
       });
     }),
-  all: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.generalProgram.findMany({
-      orderBy: {
-        sort: "asc",
+  all: publicProcedure
+    .meta({
+      openapi: {
+        method: "GET",
+        path: "/curses",
+        tags: ["users"],
+        summary: "Read all users",
       },
-    });
-  }),
+    })
+    .input(z.void())
+    .output(
+      z.array(
+        z.object({
+          id: z.number(),
+          name: z.string(),
+          descriptionGeneral: z.string().nullable(),
+          title: z.string().nullable(),
+          description: z.string(),
+          updatedAt: z.date(),
+          createdAt: z.date(),
+          shortName: z.string(),
+          url: z.string().nullable(),
+          sort: z.union([z.string(), z.null(), z.number()]), // Update type to allow strings, null values, and numbers
+        })
+      )
+    )
+    .query(async ({ ctx }) => {
+      return await ctx.prisma.generalProgram.findMany({
+        orderBy: {
+          sort: "asc",
+        },
+      });
+    }),
   update: protectedAdminProcedure
     .input(
       z.object({

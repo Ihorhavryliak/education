@@ -68,20 +68,24 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { type OpenApiMeta } from "trpc-openapi";
 
-const t = initTRPC.context<typeof createTRPCContext>().create({
-  transformer: superjson,
-  errorFormatter({ shape, error }) {
-    return {
-      ...shape,
-      data: {
-        ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
-      },
-    };
-  },
-});
+const t = initTRPC
+  .context<typeof createTRPCContext>()
+  .meta<OpenApiMeta>()
+  .create({
+    transformer: superjson,
+    errorFormatter({ shape, error }) {
+      return {
+        ...shape,
+        data: {
+          ...shape.data,
+          zodError:
+            error.cause instanceof ZodError ? error.cause.flatten() : null,
+        },
+      };
+    },
+  });
 
 /**
  * 3. ROUTER & PROCEDURE (THE IMPORTANT BIT)
@@ -122,7 +126,6 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthedAdmin = t.middleware(({ ctx, next }) => {
-
   if (!ctx.session || !ctx.session.user || ctx.session.user.role !== 1) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
@@ -144,5 +147,7 @@ const enforceUserIsAuthedAdmin = t.middleware(({ ctx, next }) => {
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 
-export const protectedAdminProcedure = t.procedure.use(enforceUserIsAuthedAdmin);
+export const protectedAdminProcedure = t.procedure.use(
+  enforceUserIsAuthedAdmin
+);
 //export const protectedProcedure = t.procedure;
