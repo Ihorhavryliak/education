@@ -44,7 +44,7 @@ export const courseRouter = createTRPCRouter({
         id: z.number(),
         sort: z.number(),
         theory: z.string(),
-        title:  z.string(),
+        title: z.string(),
         description: z.string(),
       })
     )
@@ -68,12 +68,62 @@ export const courseRouter = createTRPCRouter({
   all: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.curse.findMany();
   }),
-  getById: protectedProcedure
-    .input(z.object({ curseId: z.string() }))
+  getById: publicProcedure //protectedProcedure
+    .meta({
+      openapi: {
+        method: "GET",
+        path: "/lesson/{id}",
+        tags: ["lessons"],
+        summary: "Get lesson by id",
+      },
+    })
+    .input(z.object({ id: z.string() }))
+    .output(
+      z
+        .object({
+          id: z.number(),
+          name: z.string(),
+          descriptionCurse: z.string(),
+          img: z.string().nullable(),
+          rating: z.number().nullable(),
+          title: z.string().nullable(),
+          description: z.string().nullable(),
+          updatedAt: z.date(),
+          createdAt: z.date(),
+          programId: z.number().nullable(),
+          theory: z.string().nullable(),
+          video: z.string().nullable(),
+          sort: z.number().nullable(),
+          url: z.string().nullable(),
+          task: z.array(
+            z.object({
+              id: z.number(),
+              video: z.string().nullable(),
+              videoSolution: z.string().nullable(),
+              solution: z.string().nullable(),
+              lessonSolution: z.string().nullable(),
+              name: z.string(),
+              description: z.string(),
+              curseId: z.number(),
+              sort: z.number().nullable(),
+            })
+          ),
+          question: z.array(
+            z.object({
+              id: z.number(),
+              name: z.string(),
+              answer: z.string(),
+              curseId: z.number(),
+              sort: z.number().nullable(),
+            })
+          ),
+        })
+        .nullable()
+    )
     .query(async ({ ctx, input }) => {
       return await ctx.prisma.curse.findFirst({
         where: {
-          id: +input.curseId,
+          id: +input.id,
         },
         include: {
           task: {

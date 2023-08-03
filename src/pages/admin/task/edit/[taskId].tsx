@@ -1,6 +1,6 @@
 import { Button, Container, Select, Text } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
+//import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import React, { type FormEvent, useState, useEffect } from "react";
 import ArrowBack from "~/components/ArrowBack/ArrowBack";
@@ -11,7 +11,7 @@ import { api } from "~/utils/api";
 export default function TaskEdit() {
   const session = useSession();
   const router = useRouter();
-  const pathname = usePathname();
+  //const pathname = usePathname();
   const { data: lessons } = api.course.all.useQuery();
   const { data: taskData } = api.task.getById.useQuery(
     { taskId: router.query.taskId as string },
@@ -88,7 +88,7 @@ export default function TaskEdit() {
   if (session?.data?.user?.role === 1) {
     return (
       <Layout>
-        <ArrowBack pathname={pathname} />
+        <ArrowBack pathname={"/admin/task/"} />
         <Container>
           <form onSubmit={onSubmit}>
             <Text my="8px">Імя завдання:</Text>

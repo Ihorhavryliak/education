@@ -69,7 +69,7 @@ export default function QuestionEdit() {
   if (session?.data?.user?.role === 1) {
     return (
       <Layout>
-        <ArrowBack pathname={pathname} />
+        <ArrowBack pathname={'/admin/question/'} />
         <form onSubmit={onSubmit}>
           <Text my="8px">Назва питання:</Text>
           <InputType

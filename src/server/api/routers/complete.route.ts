@@ -21,6 +21,7 @@ export const completeRouter = createTRPCRouter({
         },
       });
     }),
+
   updateComplete: protectedProcedure
     .input(
       z.object({
@@ -77,14 +78,14 @@ export const completeRouter = createTRPCRouter({
     .input(
       z.object({
         userId: z.number(),
-        pageId: z.number().optional(),
+        programId: z.number().optional(),
       })
     )
     .mutation(({ ctx, input }) => {
       return ctx.prisma.complete.create({
         data: {
           userId: input.userId,
-          programId: input.pageId,
+          programId: input.programId,
         },
       });
     }),

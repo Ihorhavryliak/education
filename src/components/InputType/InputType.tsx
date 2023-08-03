@@ -33,7 +33,7 @@ export default function InputType({
           size={size}
           minHeight={height}
           placeholder={placeholder}
-          value={value}
+          value={value ? value : ''}
           onChange={handleName}
         />
       );

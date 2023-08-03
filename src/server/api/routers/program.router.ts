@@ -56,7 +56,69 @@ export const programRouter = createTRPCRouter({
       });
     }),
   all: publicProcedure
-    .input(z.object({ id: z.string() }))
+    .meta({
+      openapi: {
+        method: "GET",
+        path: "/program/{id}",
+        tags: ["users"],
+        summary: "Read all users",
+      },
+    })
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .output(
+      z.object({
+        program: z.array(
+          z.object({
+            id: z.number(),
+            name: z.string(),
+            title: z.string().nullable(),
+            description: z.string(),
+            generalProgramId: z.number().nullable(),
+            updatedAt: z.date(),
+            createdAt: z.date(),
+            url: z.string().nullable(),
+            order: z.number().nullable(),
+            coursesPages: z.array(
+              z.object({
+                id: z.number(),
+                name: z.string(),
+                descriptionCurse: z.string(),
+                img: z.string().nullable(),
+                rating: z.number().nullable(),
+                title: z.string().nullable(),
+                description: z.string().nullable(),
+                updatedAt: z.date(),
+                createdAt: z.date(),
+                programId: z.number().nullable(),
+                theory: z.string().nullable(),
+                video: z.string().nullable(),
+                sort: z.number().nullable(),
+                url: z.string().nullable(),
+              })
+            ),
+          })
+        ),
+
+        mainProgram: z
+          .object({
+            id: z.number(),
+            name: z.string(),
+            descriptionGeneral: z.string().nullable(),
+            title: z.string().nullable(),
+            description: z.string(),
+            updatedAt: z.date(),
+            createdAt: z.date(),
+            shortName: z.string(),
+            url: z.string().nullable(),
+            sort: z.number().nullable(),
+          })
+          .nullable(),
+      })
+    )
     .query(async ({ ctx, input }) => {
       const program = await ctx.prisma.program.findMany({
         where: {
@@ -103,7 +165,7 @@ export const programRouter = createTRPCRouter({
         },
         include: {
           coursesPages: true,
-          generalProgram: true
+          generalProgram: true,
         },
       });
     }),

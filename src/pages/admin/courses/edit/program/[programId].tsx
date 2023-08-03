@@ -85,7 +85,7 @@ export default function CreateProgram() {
       setOrder(orderProgram.toString());
     }
     if (program?.title) {
-      setTitle(program?.title as string);
+      setTitle(program?.title);
     }
   }, [program]);
 

@@ -14,3 +14,13 @@ a {
 * {
   box-sizing: border-box;
 }
+
+code {
+  display: block;
+  background-color: black;
+  padding: 15px 20px;
+  border-radius: 4px;
+}
+ b{
+  font-size: 17px;
+} 

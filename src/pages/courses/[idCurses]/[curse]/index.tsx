@@ -33,6 +33,21 @@ export default function Curse() {
   const ctx = api.useContext();
   const userId = session?.data?.user?.id as number;
   const countText = 600;
+  const { mutate: mutateCreateComplete, isLoading: isLoadingCreateComplete } =
+    api.complete.create.useMutation({
+      onSuccess: () => {
+        void ctx.complete.invalidate();
+      },
+      onError: (e) => {
+        const errorMessage = e.data?.zodError?.fieldErrors.content;
+        if (errorMessage && errorMessage[0]) {
+          console.log(errorMessage[0]);
+        } else {
+          console.log("Failed! Please try again later.");
+        }
+      },
+    });
+
   const { mutate, isLoading } = api.complete.updateComplete.useMutation({
     onSuccess: () => {
       //update data
@@ -47,6 +62,7 @@ export default function Curse() {
       }
     },
   });
+
   const { mutate: taskMutate, isLoading: isLoadingTask } =
     api.task.updateSolution.useMutation({
       onSuccess: () => {
@@ -69,7 +85,7 @@ export default function Curse() {
     refetch,
   } = api.course.getById.useQuery(
     {
-      curseId: router.query.curse as string,
+      id: router.query.curse as string,
     },
     { enabled: router.query.curse ? true : false }
   );
@@ -82,6 +98,7 @@ export default function Curse() {
       },
       { enabled: data?.id && userId ? true : false }
     );
+
   const [numberLoading, setNumberLoading] = useState(0);
 
   const [countShowText, setCountShowText] = useState({
@@ -112,6 +129,7 @@ export default function Curse() {
   };
   const handleCompleteTheory = (theoryId: number) => {
     setNumberLoading(1);
+    debugger;
     if (competesId?.questionId && competesId?.taskId) {
       mutate({ completeId: competesId?.id, theoryId });
       mutate({
@@ -194,6 +212,19 @@ export default function Curse() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
+  useEffect(() => {
+
+    if (!competesId?.userId &&  !isLoadingComplete && !(session.status === "loading")) {
+      debugger;
+      const lessonId = router?.query?.curse as string;
+      mutateCreateComplete({
+        userId: userId,
+        programId: +lessonId,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoadingComplete]);
+
   const handleShowText = () => {
     if (countShowText.isActive) {
       setCountShowText({
@@ -214,7 +245,10 @@ export default function Curse() {
         <meta name="description" content={data?.description as string} />
       </Head>
       <Layout>
-        {(isLoadingTask || isLoadingCourse || isLoadingComplete) &&
+        {(isLoadingTask ||
+          isLoadingCourse ||
+          isLoadingComplete ||
+          isLoadingCreateComplete) &&
         numberLoading === 0 ? (
           <Loader />
         ) : (

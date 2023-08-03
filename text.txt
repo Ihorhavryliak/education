@@ -18,3 +18,5 @@ npx prisma generate
 user: 
 1: alice@prisma.io
 2: 1234
+Z@z@pu1995_1995
+npx supabase db dump --db-url "postgresql://postgres:Z@z@pu1995_1995@db.bfbvnvwnzhyikbcdbahl.supabase.co:5432/postgres" -f data.sql --data-only

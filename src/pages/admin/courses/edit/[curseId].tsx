@@ -24,7 +24,7 @@ export default function CreateCurse() {
   });
   const { data: lessonData } = api.course.getById.useQuery(
     {
-      curseId: curseId as string,
+      id: curseId as string,
     },
     { enabled: curseId ? true : false }
   );
